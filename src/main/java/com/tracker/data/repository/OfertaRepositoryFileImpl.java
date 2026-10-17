@@ -75,14 +75,7 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
     public void guardarOferta(Oferta oferta) {
         File archivo = new File(RUTA_FICHERO);
 
-        String nuevaOferta = oferta.id() + ";" +
-                oferta.titulo() + ";" +
-                oferta.empresa() + ";" +
-                oferta.estado() + ";" +
-                oferta.fechaPostulacion() + ";" +
-                (oferta.enlace() != null ? oferta.enlace() : "") + ";" +
-                (oferta.descripcion() != null ? oferta.descripcion() : "") + ";" +
-                (oferta.salario() != null ? oferta.salario() : "") + "\n";
+        String nuevaOferta = convertirAFormatoCsv(oferta);
 
         try (BufferedWriter bfr = new BufferedWriter(new FileWriter(archivo, true))) {
             bfr.write(nuevaOferta);
@@ -107,14 +100,7 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
 
             bfr.write(CABECERA + "\n");
             for (Oferta oferta : ofertas) {
-                String linea = oferta.id() + ";" +
-                        oferta.titulo() + ";" +
-                        oferta.empresa() + ";" +
-                        oferta.estado() + ";" +
-                        oferta.fechaPostulacion() + ";" +
-                        (oferta.enlace() != null ? oferta.enlace() : "") + ";" +
-                        (oferta.descripcion() != null ? oferta.descripcion() : "") + ";" +
-                        (oferta.salario() != null ? oferta.salario() : "") + "\n";
+                String linea = convertirAFormatoCsv(oferta);
                 bfr.write(linea);
             }
 
@@ -134,15 +120,7 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
             bfr.write(CABECERA + "\n");
 
             for (Oferta oferta : ofertas) {
-                String linea = oferta.id() + ";" +
-                        oferta.titulo() + ";" +
-                        oferta.empresa() + ";" +
-                        oferta.estado() + ";" +
-                        oferta.fechaPostulacion() + ";" +
-                        (oferta.enlace() != null ? oferta.enlace() : "") + ";" +
-                        (oferta.descripcion() != null ? oferta.descripcion() : "") + ";" +
-                        (oferta.salario() != null ? oferta.salario() : "") + "\n";
-                bfr.write(linea);
+                bfr.write(convertirAFormatoCsv(oferta));
             }
 
             System.out.println("Se han guardado todas las ofertas correctamente.");
@@ -150,5 +128,19 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
         } catch (IOException e) {
             System.out.println("Error de entrada/salida al guardar todas las ofertas: " + e.getMessage());
         }
+    }
+
+    /* HELPERS */
+
+    private static String convertirAFormatoCsv(Oferta oferta) {
+        String linea = oferta.id() + ";" +
+                oferta.titulo() + ";" +
+                oferta.empresa() + ";" +
+                oferta.estado() + ";" +
+                oferta.fechaPostulacion() + ";" +
+                (oferta.enlace() != null ? oferta.enlace() : "") + ";" +
+                (oferta.descripcion() != null ? oferta.descripcion() : "") + ";" +
+                (oferta.salario() != null ? oferta.salario() : "") + "\n";
+        return linea;
     }
 }
