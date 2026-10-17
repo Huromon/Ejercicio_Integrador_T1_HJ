@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OfertaRepositoryFileImpl implements OfertaRepository{
+public class OfertaRepositoryFileImpl implements OfertaRepository {
 
     private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final String RUTA_FICHERO = "candidaturas.csv";
@@ -28,7 +28,9 @@ public class OfertaRepositoryFileImpl implements OfertaRepository{
 
         try (BufferedReader bfr = new BufferedReader(new FileReader(archivo))) {
 
+            String cabecera = bfr.readLine();
             String linea;
+
             while ((linea = bfr.readLine()) != null) {
 
                 if (!linea.isBlank()) {
@@ -43,8 +45,7 @@ public class OfertaRepositoryFileImpl implements OfertaRepository{
                     String enlace = datos.length > 5 ? datos[5].trim() : "";
                     String descripcion = datos.length > 6 ? datos[6].trim() : "";
 
-                    Double salario = null;
-
+                    Double salario = (datos.length > 7 && !datos[7].trim().isEmpty()) ? Double.parseDouble(datos[7].trim()) : null;
                     Oferta oferta = new Oferta(id, titulo, empresa, estado, fechaPostulacion, enlace, descripcion, salario);
                     ofertas.add(oferta);
                 }
