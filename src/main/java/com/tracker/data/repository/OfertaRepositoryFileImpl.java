@@ -6,6 +6,7 @@ import com.tracker.data.entity.Oferta;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
 
     private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final String RUTA_FICHERO = "candidaturas.csv";
+    private static final String CABECERA = "id;titulo;empresa;estado;fechaPostulacion;enlace;descripcion;salario";
 
     @Override
     public List<Oferta> listarOfertas() {
@@ -92,7 +94,36 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
 
     @Override
     public boolean eliminarPorId(Integer id) {
-        return false;
+        List<Oferta> ofertas = listarOfertas();
+        boolean encontrada = ofertas.removeIf(oferta -> oferta.id().equals(id));
+
+        if (!encontrada) {
+            return false;
+        }
+
+        File archivo = new File(RUTA_FICHERO);
+
+        try (BufferedWriter bfr = new BufferedWriter(new FileWriter(archivo, false))) {
+
+            bfr.write(CABECERA + "\n");
+            for (Oferta oferta : ofertas) {
+                String linea = oferta.id() + ";" +
+                        oferta.titulo() + ";" +
+                        oferta.empresa() + ";" +
+                        oferta.estado() + ";" +
+                        oferta.fechaPostulacion() + ";" +
+                        (oferta.enlace() != null ? oferta.enlace() : "") + ";" +
+                        (oferta.descripcion() != null ? oferta.descripcion() : "") + ";" +
+                        (oferta.salario() != null ? oferta.salario() : "") + "\n";
+                bfr.write(linea);
+            }
+
+            return true;
+
+        } catch (IOException e) {
+            System.out.println("Error al eliminar la oferta: " + e.getMessage());
+            return false;
+        }
     }
 
     @Override
