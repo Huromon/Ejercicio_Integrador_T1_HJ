@@ -1,5 +1,7 @@
 package com.tracker.data.candidatura;
 
+import com.tracker.data.entity.Estado;
+
 import java.time.LocalDate;
 
 public record Oferta(
