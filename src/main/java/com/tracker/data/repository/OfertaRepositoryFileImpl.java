@@ -62,6 +62,13 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
 
     @Override
     public Oferta buscarPorId(Integer id) {
+        List<Oferta> ofertas = listarOfertas();
+
+        for (Oferta oferta : ofertas) {
+            if (id.equals(oferta.id())) {
+                return oferta;
+            }
+        }
         return null;
     }
 
