@@ -1,6 +1,6 @@
 package com.tracker.business;
 
-import com.tracker.data.candidatura.Oferta;
+import com.tracker.data.entity.Oferta;
 
 import java.util.List;
 

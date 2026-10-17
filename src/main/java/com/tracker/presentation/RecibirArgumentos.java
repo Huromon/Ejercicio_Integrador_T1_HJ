@@ -1,10 +1,9 @@
 package com.tracker.presentation;
 
 import com.tracker.business.OfertaService;
-import com.tracker.data.candidatura.Estado;
-import com.tracker.data.candidatura.Oferta;
+import com.tracker.data.entity.Estado;
+import com.tracker.data.entity.Oferta;
 
-import javax.swing.text.html.parser.Parser;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
