@@ -73,14 +73,9 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
 
     @Override
     public void guardarOferta(Oferta oferta) {
-        File archivo = new File(RUTA_FICHERO);
-        
-        try (BufferedWriter bfr = new BufferedWriter(new FileWriter(archivo, true))) {
-            bfr.write(convertirAFormatoCsv(oferta));
-            System.out.println("Oferta guardada correctamente en el fichero.");
-        } catch (IOException e) {
-            System.out.println("Error al guardar la oferta: " + e.getMessage());
-        }
+        List<Oferta> ofertas = listarOfertas();
+        ofertas.add(oferta);
+        escribirEnFichero(ofertas);
     }
 
     @Override
@@ -88,7 +83,7 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
         List<Oferta> ofertas = listarOfertas();
         boolean encontrada = ofertas.removeIf(oferta -> oferta.id().equals(id));
 
-        if (!encontrada) {
+        if (encontrada) {
             escribirEnFichero(ofertas);
         }
         return encontrada;
