@@ -3,10 +3,7 @@ package com.tracker.data.repository;
 import com.tracker.data.entity.Estado;
 import com.tracker.data.entity.Oferta;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -74,7 +71,23 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
 
     @Override
     public void guardarOferta(Oferta oferta) {
+        File archivo = new File(RUTA_FICHERO);
 
+        String nuevaOferta = oferta.id() + ";" +
+                oferta.titulo() + ";" +
+                oferta.empresa() + ";" +
+                oferta.estado() + ";" +
+                oferta.fechaPostulacion() + ";" +
+                (oferta.enlace() != null ? oferta.enlace() : "") + ";" +
+                (oferta.descripcion() != null ? oferta.descripcion() : "") + ";" +
+                (oferta.salario() != null ? oferta.salario() : "") + "\n";
+
+        try (BufferedWriter bfr = new BufferedWriter(new FileWriter(archivo, true))) {
+            bfr.write(nuevaOferta);
+            System.out.println("Oferta guardada correctamente en el fichero.");
+        } catch (IOException e) {
+            System.out.println("Error al guardar la oferta: " + e.getMessage());
+        }
     }
 
     @Override
