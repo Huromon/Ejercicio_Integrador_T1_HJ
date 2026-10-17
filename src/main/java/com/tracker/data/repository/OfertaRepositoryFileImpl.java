@@ -128,6 +128,27 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
 
     @Override
     public void guardarTodas(List<Oferta> ofertas) {
+        File archivo = new File(RUTA_FICHERO);
 
+        try (BufferedWriter bfr = new BufferedWriter(new FileWriter(archivo, false))) {
+            bfr.write(CABECERA + "\n");
+
+            for (Oferta oferta : ofertas) {
+                String linea = oferta.id() + ";" +
+                        oferta.titulo() + ";" +
+                        oferta.empresa() + ";" +
+                        oferta.estado() + ";" +
+                        oferta.fechaPostulacion() + ";" +
+                        (oferta.enlace() != null ? oferta.enlace() : "") + ";" +
+                        (oferta.descripcion() != null ? oferta.descripcion() : "") + ";" +
+                        (oferta.salario() != null ? oferta.salario() : "") + "\n";
+                bfr.write(linea);
+            }
+
+            System.out.println("Se han guardado todas las ofertas correctamente.");
+
+        } catch (IOException e) {
+            System.out.println("Error de entrada/salida al guardar todas las ofertas: " + e.getMessage());
+        }
     }
 }
