@@ -74,11 +74,9 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
     @Override
     public void guardarOferta(Oferta oferta) {
         File archivo = new File(RUTA_FICHERO);
-
-        String nuevaOferta = convertirAFormatoCsv(oferta);
-
+        
         try (BufferedWriter bfr = new BufferedWriter(new FileWriter(archivo, true))) {
-            bfr.write(nuevaOferta);
+            bfr.write(convertirAFormatoCsv(oferta));
             System.out.println("Oferta guardada correctamente en el fichero.");
         } catch (IOException e) {
             System.out.println("Error al guardar la oferta: " + e.getMessage());
@@ -91,43 +89,14 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
         boolean encontrada = ofertas.removeIf(oferta -> oferta.id().equals(id));
 
         if (!encontrada) {
-            return false;
+            escribirEnFichero(ofertas);
         }
-
-        File archivo = new File(RUTA_FICHERO);
-
-        try (BufferedWriter bfr = new BufferedWriter(new FileWriter(archivo, false))) {
-
-            bfr.write(CABECERA + "\n");
-            for (Oferta oferta : ofertas) {
-                String linea = convertirAFormatoCsv(oferta);
-                bfr.write(linea);
-            }
-
-            return true;
-
-        } catch (IOException e) {
-            System.out.println("Error al eliminar la oferta: " + e.getMessage());
-            return false;
-        }
+        return encontrada;
     }
 
     @Override
     public void guardarTodas(List<Oferta> ofertas) {
-        File archivo = new File(RUTA_FICHERO);
-
-        try (BufferedWriter bfr = new BufferedWriter(new FileWriter(archivo, false))) {
-            bfr.write(CABECERA + "\n");
-
-            for (Oferta oferta : ofertas) {
-                bfr.write(convertirAFormatoCsv(oferta));
-            }
-
-            System.out.println("Se han guardado todas las ofertas correctamente.");
-
-        } catch (IOException e) {
-            System.out.println("Error de entrada/salida al guardar todas las ofertas: " + e.getMessage());
-        }
+        escribirEnFichero(ofertas);
     }
 
     /* HELPERS */
@@ -142,5 +111,22 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
                 (oferta.descripcion() != null ? oferta.descripcion() : "") + ";" +
                 (oferta.salario() != null ? oferta.salario() : "") + "\n";
         return linea;
+    }
+
+    private void escribirEnFichero(List<Oferta> ofertas) {
+        File archivo = new File(RUTA_FICHERO);
+
+        try (BufferedWriter bfr = new BufferedWriter(new FileWriter(archivo, false))) {
+            bfr.write(CABECERA + "\n");
+
+            for (Oferta oferta : ofertas) {
+                bfr.write(convertirAFormatoCsv(oferta));
+            }
+
+            System.out.println("Se han guardado todas las ofertas correctamente.");
+
+        } catch (IOException e) {
+            System.out.println("Error de entrada/salida al guardar todas las ofertas: " + e.getMessage());
+        }
     }
 }
