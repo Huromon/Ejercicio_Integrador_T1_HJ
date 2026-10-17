@@ -1,4 +1,14 @@
 package com.tracker.business;
 
-public class OfertaService {
+import com.tracker.data.candidatura.Oferta;
+
+import java.util.List;
+
+public class OfertaService{
+
+
+    public static String VerCandidatura(Integer idex, List<Oferta> e){
+        return (e.get(idex)).toString();
+    }
+
 }
