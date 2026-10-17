@@ -1,4 +1,4 @@
-package org.example;
+package com.tracker.data.entity;
 
 import java.time.LocalDate;
 
