@@ -3,18 +3,19 @@ package com.tracker.business;
 import com.tracker.data.entity.Estado;
 import com.tracker.data.entity.Oferta;
 import com.tracker.data.entity.candidaturas;
+import com.tracker.data.repository.OfertaRepositoryFileImpl;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Properties;
+
 
 public class OfertaService implements OfertaServicesint{
    candidaturas lista = new candidaturas();
     private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-   static Integer ids = 1;
+  public static Integer ids = 1;
+   OfertaRepositoryFileImpl arc = new OfertaRepositoryFileImpl();
+
 
 @Override
     public  String VerCandidatura(Integer idex ) {
@@ -23,8 +24,24 @@ public class OfertaService implements OfertaServicesint{
                 return l.toString();
             }
         }
-        return "no se ha encontrado una candidatura con ese index";
+        return "no se ha encontrado una candidatura con ese ID";
     }
+    @Override
+    public  String EliminarCandidatura(Integer idex ) {
+        for (Oferta l : lista.getListado()){
+            if(l.id().equals(idex)){
+                lista.getListado().remove(l);
+                arc.guardarTodas(lista.getListado());
+                return "Candidatura Eliminada";
+            }
+        }
+        return "no se ha encontrado una candidatura con ese ID";
+    }
+
+
+
+
+
 @Override
     public String Listar(){
         String e="";
@@ -70,6 +87,7 @@ public class OfertaService implements OfertaServicesint{
                                         0.0
                                 )
                         );
+                        arc.guardarTodas(lista.getListado());
                         ids++;
                         return "candidatura añadida con exito";
                     }catch (IllegalArgumentException e){
@@ -172,14 +190,14 @@ public class OfertaService implements OfertaServicesint{
             case "PENDIENTE" -> {
                 return Estado.PENDIENTE;
             }
-            case "ACEPTADO" -> {
-                return Estado.PENDIENTE;
+            case "ACEPTADA" -> {
+                return Estado.ACEPTADA;
             }
-            case "RECHAZADO" -> {
-                return Estado.PENDIENTE;
+            case "RECHAZADA" -> {
+                return Estado.RECHAZADA;
             }
             case "ENTREVISTA" -> {
-                return Estado.PENDIENTE;
+                return Estado.ENTREVISTA;
             }
             default -> throw new IllegalArgumentException("estado invalido");
 

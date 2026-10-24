@@ -2,6 +2,7 @@ package com.tracker.data.repository;
 
 import com.tracker.data.entity.Estado;
 import com.tracker.data.entity.Oferta;
+import com.tracker.data.entity.candidaturas;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -18,7 +19,7 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
 
     @Override
     public List<Oferta> listarOfertas() {
-        List<Oferta> ofertas = new ArrayList<>();
+        List<Oferta> ofertas =  new ArrayList<>();
         File archivo = new File(RUTA_FICHERO);
 
         if (!archivo.exists()) {

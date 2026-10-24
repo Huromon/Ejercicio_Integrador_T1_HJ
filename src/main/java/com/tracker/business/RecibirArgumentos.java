@@ -1,21 +1,14 @@
 package com.tracker.business;
 
-import com.tracker.business.OfertaService;
-import com.tracker.data.entity.Estado;
-import com.tracker.data.entity.Oferta;
-import com.tracker.data.repository.OfertaRepository;
-import com.tracker.data.repository.OfertaRepositoryFileImpl;
 
-import javax.swing.text.html.parser.Parser;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import jdk.swing.interop.SwingInterOpUtils;
 
 /** Clase para reducir la complejidad del main*/
  public class RecibirArgumentos {
      public static  void argumento(String[] arg){
 
         OfertaService OS = new OfertaService();
+
 
 
 
@@ -48,6 +41,8 @@ import java.util.List;
 
                             System.out.println("añadir");
                             System.out.println(OS.añadir(arg));
+                            //DE PRUEBA
+                            System.out.println(OS.Listar());
 
                         break;
                     }
@@ -57,10 +52,25 @@ import java.util.List;
                          * Llamar al metodo de eliminar para eliminar de la lista la candidatura
                          * por el ID indicado en el argumento
                          * */
+                        // de prueba
+                        String[] h = {"añadir","--titulo","X","--empresa","Y","--estado","PENDIENTE","--fecha","13/10/2027"};
+                        OS.añadir(h);
+                        String[] j = {"añadir","--titulo","X","--empresa","Y","--estado","RECHAZADA","--fecha","13/10/2027"};
+                        OS.añadir(j);
+                        System.out.println(OS.Listar());
+                        //----
+                        System.out.println(OS.EliminarCandidatura(1));
+                        System.out.println(OS.Listar());
                         break;
                     }
                     case "ver": {
-
+                        // de prueba
+                        String[] h = {"añadir","--titulo","X","--empresa","Y","--estado","PENDIENTE","--fecha","13/10/2027"};
+                        OS.añadir(h);
+                        String[] j = {"añadir","--titulo","X","--empresa","Y","--estado","RECHAZADA","--fecha","13/10/2027"};
+                        OS.añadir(j);
+                        //----
+                        System.out.println(OS.VerCandidatura(1));
                         break;
                     }
                     default: {

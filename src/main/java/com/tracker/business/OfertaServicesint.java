@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 public interface OfertaServicesint {
     String VerCandidatura(Integer i);
+    String EliminarCandidatura(Integer i);
     String Listar();
     String Listar(LinkedList<Oferta> e);
     String añadir(String[] arg);

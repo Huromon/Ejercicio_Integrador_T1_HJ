@@ -16,15 +16,15 @@ public record Oferta(
 
     @Override
     public String toString() {
-        return "Oferta{" +
+        return "{" +
                 "id = " + id +
                 ", titulo = '" + titulo + '\'' +
                 ", empresa = '" + empresa + '\'' +
                 ", estado = " + estado +
                 ", fechaPostulacion=" + fechaPostulacion +
-                ((enlace.equals(""))?(", enlace='" + enlace + '\''):"") +
-                ((descripcion.equals(""))?(", descripcion = '" + descripcion + '\''):"") +
-                ((salario == 0.0)?(", salario = '" + salario ):"") +
+                ((!enlace.equals(""))?(", enlace='" + enlace + '\''):"") +
+                ((!descripcion.equals(""))?(", descripcion = '" + descripcion + '\''):"") +
+                ((salario != 0.0)?(", salario = '" + salario ):"") +
                 '}';
     }
 }
