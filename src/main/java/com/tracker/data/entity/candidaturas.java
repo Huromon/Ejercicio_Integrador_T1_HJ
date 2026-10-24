@@ -13,5 +13,8 @@ public class candidaturas {
     public LinkedList<Oferta> getListado(){
         return  listado;
     }
+    public void persistencia(LinkedList<Oferta> l){
+     listado = l;
+    }
 
 }

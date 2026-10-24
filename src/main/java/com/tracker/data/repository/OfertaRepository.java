@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface OfertaRepository {
     List<Oferta> listarOfertas();
+    List<Oferta> persistencia();
     Oferta buscarPorId(Integer id);
     void guardarOferta(Oferta oferta);
     boolean eliminarPorId(Integer id);

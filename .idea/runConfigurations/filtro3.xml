@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="filtro3" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.tracker.presentation.Main" />
+    <module name="EjercicioIntegrador" />
+    <option name="PROGRAM_PARAMETERS" value="listar --empresa Y --estado PENDIENTE" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

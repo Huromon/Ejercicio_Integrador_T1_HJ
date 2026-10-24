@@ -5,15 +5,18 @@ import jdk.swing.interop.SwingInterOpUtils;
 
 /** Clase para reducir la complejidad del main*/
  public class RecibirArgumentos {
+
      public static  void argumento(String[] arg){
 
         OfertaService OS = new OfertaService();
+         OS.persistencia();
 
 
 
 
 
          try{
+
                  /**
                   * Placeholder, para despues, poner las llamadas a metodos
                   * */
@@ -41,8 +44,8 @@ import jdk.swing.interop.SwingInterOpUtils;
 
                             System.out.println("añadir");
                             System.out.println(OS.añadir(arg));
-                            //DE PRUEBA
-                            System.out.println(OS.Listar());
+
+
 
                         break;
                     }
@@ -52,27 +55,23 @@ import jdk.swing.interop.SwingInterOpUtils;
                          * Llamar al metodo de eliminar para eliminar de la lista la candidatura
                          * por el ID indicado en el argumento
                          * */
-                        // de prueba
-                        String[] h = {"añadir","--titulo","X","--empresa","Y","--estado","PENDIENTE","--fecha","13/10/2027"};
-                        OS.añadir(h);
-                        String[] j = {"añadir","--titulo","X","--empresa","Y","--estado","RECHAZADA","--fecha","13/10/2027"};
-                        OS.añadir(j);
-                        System.out.println(OS.Listar());
-                        //----
-                        System.out.println(OS.EliminarCandidatura(1));
+
+                        System.out.println(OS.EliminarCandidatura(Integer.parseInt(arg[1])));
                         System.out.println(OS.Listar());
                         break;
                     }
                     case "ver": {
-                        // de prueba
-                        String[] h = {"añadir","--titulo","X","--empresa","Y","--estado","PENDIENTE","--fecha","13/10/2027"};
-                        OS.añadir(h);
-                        String[] j = {"añadir","--titulo","X","--empresa","Y","--estado","RECHAZADA","--fecha","13/10/2027"};
-                        OS.añadir(j);
-                        //----
-                        System.out.println(OS.VerCandidatura(1));
+                        System.out.println(OS.VerCandidatura(Integer.parseInt(arg[1])));
                         break;
                     }
+                 case "importar" :{
+                     System.out.println("importar");
+                     OS.Importar();
+
+
+
+                        break;
+                }
                     default: {
 
                         throw new IllegalArgumentException("no se ha detectado ningun metodo habilitado en el argmento");

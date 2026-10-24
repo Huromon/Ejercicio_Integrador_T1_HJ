@@ -17,6 +17,33 @@ public class OfertaService implements OfertaServicesint{
    OfertaRepositoryFileImpl arc = new OfertaRepositoryFileImpl();
 
 
+    /**
+     *Para guardar la las Candidaturas tras cada argumento y/u operacion
+     * */
+   public void persistencia(){
+
+       for(Oferta f : arc.persistencia()){
+           lista.getListado().add(f);
+       };
+
+       System.out.println(Listar());
+       arc.guardarTodas(lista.getListado());
+       ids = lista.getListado().getLast().id() + 1;
+   }
+
+    public void Importar(){
+        lista.getListado().clear();
+        for(Oferta f : arc.listarOfertas()){
+            lista.getListado().add(f);
+        };
+
+        System.out.println(Listar());
+        arc.guardarTodas(lista.getListado());
+        ids = lista.getListado().getLast().id() + 1;
+    }
+
+
+
 @Override
     public  String VerCandidatura(Integer idex ) {
         for (Oferta l : lista.getListado()){
@@ -31,6 +58,7 @@ public class OfertaService implements OfertaServicesint{
         for (Oferta l : lista.getListado()){
             if(l.id().equals(idex)){
                 lista.getListado().remove(l);
+                //PRUEBA DE PERSISTENCIA
                 arc.guardarTodas(lista.getListado());
                 return "Candidatura Eliminada";
             }
