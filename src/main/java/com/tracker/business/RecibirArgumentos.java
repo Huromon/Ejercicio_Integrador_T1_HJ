@@ -3,6 +3,8 @@ package com.tracker.business;
 import com.tracker.business.OfertaService;
 import com.tracker.data.entity.Estado;
 import com.tracker.data.entity.Oferta;
+import com.tracker.data.repository.OfertaRepository;
+import com.tracker.data.repository.OfertaRepositoryFileImpl;
 
 import javax.swing.text.html.parser.Parser;
 import java.time.LocalDate;
@@ -12,56 +14,60 @@ import java.util.List;
 /** Clase para reducir la complejidad del main*/
  public class RecibirArgumentos {
      public static  void argumento(String[] arg){
-        //de prueba
-         List<Oferta> candi= new ArrayList<Oferta>();
-         Oferta p = new Oferta(1,"tt","eee", Estado.PENDIENTE, LocalDate.now(),"no","lolol",23.0);
-         candi.add(p);
-         //-
+
+        OfertaService OS = new OfertaService();
+
+
+
 
          try{
                  /**
                   * Placeholder, para despues, poner las llamadas a metodos
                   * */
+                 if(arg.length == 1 && arg[0].equalsIgnoreCase("listar")){
+                     System.out.println(OS.Listar());
+                 }else{
+
                 switch (arg[0].toLowerCase()) {
-                    case "--listar": {
-                        System.out.println("listar");
-                        /** 
-                         * Llamar al metodo de listar Para que muestre la "lista" del gestor
-                         * */
-                        break;
-                    }
-                    case "--filtrar": {
+
+                    case "listar": {
                         System.out.println("filtrar");
                         /**
                          * Llamar al metodo de filtrar donde segun los demas parametros introducidos,
                          * realizar diferentes "metodos" de filtrado
                          * */
+                        // de prueba
+                        String[] h = {"añadir","--titulo","X","--empresa","Y","--estado","PENDIENTE","--fecha","13/10/2027"};
+                        OS.añadir(h);
+                        //----
+                        System.out.println(OS.filtrar(arg));
+
                         break;
                     }
-                    case "--añadir": {
-                        System.out.println("añadir");
-                        /** 
-                         * Llamar al metodo de añadir para que se añada una candidatura a la "lista del gestor"
-                         * con los parametros indicados en el argumento
-                         * */
+                    case "añadir": {
+
+                            System.out.println("añadir");
+                            System.out.println(OS.añadir(arg));
+
                         break;
                     }
-                    case "--eliminar": {
+                    case "eliminar": {
                         System.out.println("eliminar");
-                        /** 
+                        /**
                          * Llamar al metodo de eliminar para eliminar de la lista la candidatura
                          * por el ID indicado en el argumento
                          * */
                         break;
                     }
-                    case "--ver":{
-                        System.out.println(OfertaService.VerCandidatura(Integer.parseInt(arg[1]),candi));
+                    case "ver": {
+
                         break;
                     }
                     default: {
-                        
+
                         throw new IllegalArgumentException("no se ha detectado ningun metodo habilitado en el argmento");
                     }
+                }
                 }
          }catch (IllegalArgumentException err){
              System.out.println(err.getMessage());

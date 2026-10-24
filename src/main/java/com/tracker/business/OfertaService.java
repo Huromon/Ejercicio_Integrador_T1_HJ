@@ -27,7 +27,24 @@ public class OfertaService implements OfertaServicesint{
     }
 @Override
     public String Listar(){
-        return lista.getListado().stream().toString();
+        String e="";
+       for (Oferta o : lista.getListado()){
+           if (o!=null){
+               e+= o.toString()+"\n";
+           }
+       }
+       if(e.equals("")){e="no hay ninguna candidatura";}
+       return e;
+    }
+    public String Listar(LinkedList<Oferta> filtrado){
+        String e="";
+        for (Oferta o : filtrado){
+            if (o!=null){
+                e+= o.toString()+"\n";
+            }
+        }
+        if(e.equals("")){e="no hay ninguna candidatura";}
+        return e;
     }
 
     @Override
@@ -54,27 +71,11 @@ public class OfertaService implements OfertaServicesint{
                                 )
                         );
                         ids++;
-                        return "añadido con exito";
+                        return "candidatura añadida con exito";
                     }catch (IllegalArgumentException e){
                         return e.getMessage();
                     }
 
-                }
-                case 11: {
-                    if(arg[9].equalsIgnoreCase("--enlace")){
-
-                    }
-                    break;
-                }
-                case 13: {
-
-
-                    break;
-                }
-                case 15: {
-
-
-                    break;
                 }
                 default: return "parametros invalidos";
 
@@ -91,22 +92,79 @@ public class OfertaService implements OfertaServicesint{
 
     @Override
     public String filtrar(String[] arg) {
+        try {
+            IllegalArgumentException aa = new IllegalArgumentException("parametros invalidos");
+            NullPointerException ll = new NullPointerException("no hay coincidencias");
+            if (arg.length<3){
+                throw aa;
+            }
+            if (arg[1].equalsIgnoreCase("--empresa")) {
+                if (arg.length == 3) {
+
+                      return  Listar(filtrarEmpresa(arg[2]));
+
+
+                } else {
+                    if (arg[3].equalsIgnoreCase("--estado")) {
+
+                        return  Listar(filtrarEstado(arg[4],filtrarEmpresa(arg[2])));
+
+
+                    } else {
+                        throw aa;
+                    }
+
+                }
+
+            } else if (arg[1].equalsIgnoreCase("--estado")) {
+
+                    return  Listar(filtrarEstado(arg[2]));
+
+
+            }
+        }catch (IllegalArgumentException e){
+            return e.getMessage();
+        }
+
+
         return "";
     }
 
     @Override
     public LinkedList<Oferta> filtrarEmpresa(String empresa) {
-        return null;
+        LinkedList<Oferta> filtradas = new LinkedList<>();
+        for(Oferta o : lista.getListado()){
+            if((o.empresa()).equalsIgnoreCase(empresa)){
+                filtradas.add(o);
+            }
+        }
+        return filtradas;
     }
-
+/**
+ *
+ * AL FILTRAR SE TIENE QUE PONER LA EMPRESA ANTES QUE EL ESTADO SI SE FILTRA CON LOS DOS PARAMETROS
+ *
+ * */
     @Override
     public LinkedList<Oferta> filtrarEstado(String estado) {
-        return null;
+        LinkedList<Oferta> filtradas = new LinkedList<>();
+        for(Oferta o : lista.getListado()){
+            if(o.estado().equals(comprobar(estado))){
+                filtradas.add(o);
+            }
+        }
+        return filtradas;
     }
 
     @Override
     public LinkedList<Oferta> filtrarEstado(String estado, LinkedList<Oferta> nn) {
-        return null;
+        LinkedList<Oferta> filtradas = new LinkedList<>();
+        for(Oferta o : nn){
+            if(o.estado().equals(comprobar(estado))){
+                filtradas.add(o);
+            }
+        }
+        return filtradas;
     }
 
     public Estado comprobar(String s ){
