@@ -1,2 +1,22 @@
 id;titulo;empresa;estado;fechaPostulacion;enlace;descripcion;salario
-1;H;G;RECHAZADA;12/09/2026;;;0.0
+3;Backend Software Engineer;NTT Data;ACEPTADA;01/09/2026;https://ntt.jobs/3;API REST con Java 21;30000.0
+4;Fullstack Developer;Accenture;RECHAZADA;10/09/2026;https://accenture.jobs/4;Node.js y Angular;26000.0
+5;QA Automation Engineer;Indra;ENTREVISTA;12/09/2026;https://indra.jobs/5;Pruebas con Selenium y JUnit;27000.0
+6;Analista Programador Java;Deloitte;PENDIENTE;18/09/2026;https://deloitte.jobs/6;Mantenimiento de microservicios;32000.0
+7;Desarrollador Mobile Flutter;Mercadona;ACEPTADA;22/09/2026;https://mercadona.jobs/7;App móvil corporativa;29000.0
+8;DevOps Engineer Junior;NTT Data;RECHAZADA;25/09/2026;https://ntt.jobs/8;Docker y Kubernetes;28000.0
+9;Consultor Tecnológico;Accenture;PENDIENTE;28/09/2026;https://accenture.jobs/9;Consultoría IT e integración;31000.0
+10;Desarrollador Java Senior;Indra;ACEPTADA;02/10/2026;https://indra.jobs/10;Líder técnico en Java;42000.0
+11;Data Analyst;Mercadona;ENTREVISTA;05/10/2026;https://mercadona.jobs/11;Análisis con Python y SQL;27000.0
+12;Desarrollador Web Fullstack;Deloitte;RECHAZADA;08/10/2026;https://deloitte.jobs/12;Vue.js y Java Spring;29000.0
+13;Ingeniero de Software;NTT Data;PENDIENTE;12/10/2026;https://ntt.jobs/13;Desarrollo backend en la nube;35000.0
+14;Soporte Técnico N2;Indra;RECHAZADA;15/10/2026;https://indra.jobs/14;Gestión de incidencias IT;22000.0
+15;Arquitecto Software;Accenture;ENTREVISTA;20/10/2026;https://accenture.jobs/15;Diseño de sistemas distribuidos;48000.0
+16;Dev Java Junior;Indra;PENDIENTE;25/10/2026;;;
+17;DevOps Engineer;Mercadona;PENDIENTE;05/10/2026;https://mercadona.jobs/101;Docker y Kubernetes;30000.0
+18;Data Analyst;Telefónica;ENTREVISTA;08/10/2026;https://telefonica.jobs/102;Python y SQL;29000.0
+19;Java Developer;TechCorp;PENDIENTE;25/10/2026;https://example.com;Junior role;30000.0
+20;Backend Dev;StartupX;ENTREVISTA;26/10/2026;;;
+21;DevOps Engineer;Mercadona;PENDIENTE;05/10/2026;https://mercadona.jobs/101;Docker y Kubernetes;30000.0
+22;Data Analyst;Telefónica;ENTREVISTA;08/10/2026;https://telefonica.jobs/102;Python y SQL;29000.0
+23;Dev;Corp;PENDIENTE;25/10/2026;;;
