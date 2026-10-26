@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="añadir" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.tracker.presentation.Main" />
+    <module name="EjercicioIntegrador" />
+    <option name="PROGRAM_PARAMETERS" value="añadir --titulo Dev --empresa Nintendo --estado PENDIENTE --fecha 12/10/2026" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
