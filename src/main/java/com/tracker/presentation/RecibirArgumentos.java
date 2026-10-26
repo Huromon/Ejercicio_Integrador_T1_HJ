@@ -5,10 +5,13 @@ import com.tracker.business.OfertaServicesint;
 import com.tracker.data.repository.OfertaRepository;
 import com.tracker.data.repository.OfertaRepositoryFileImpl;
 
+import java.util.logging.Logger;
+
 /**
  * Gestiona la recepción y procesamiento de argumentos desde la línea de comandos.
  */
 public class RecibirArgumentos {
+    private static Logger logger = Logger.getLogger("Gestor");
 
     /**
      * Valida y ejecuta el comando solicitado según los argumentos recibidos.
@@ -26,9 +29,9 @@ public class RecibirArgumentos {
             try {
                 ejecutarComando(servicio, comando, arg);
             } catch (NumberFormatException e) {
-                System.out.println("Error: El ID proporcionado debe ser un número entero válido.");
+                 logger.warning("Error: El ID proporcionado debe ser un número entero válido.");
             } catch (Exception e) {
-                System.out.println("Error durante la ejecución del comando: " + e.getMessage());
+                logger.warning("Error durante la ejecución del comando: " + e.getMessage());
             }
         }
     }
@@ -41,8 +44,8 @@ public class RecibirArgumentos {
     private static boolean validarArgumentosEntrada(String[] arg) {
         boolean esValido = true;
         if (arg == null || arg.length == 0) {
-            System.out.println("Error: No se ha especificado ningún comando.");
-            System.out.println("Comandos disponibles: -listar, -añadir, -ver, -borrar, -importar");
+            logger.warning("Error: No se ha especificado ningún comando.");
+            logger.info("Comandos disponibles: -listar, -añadir, -ver, -borrar, -importar");
             esValido = false;
         }
         return esValido;
@@ -61,7 +64,7 @@ public class RecibirArgumentos {
             case "-borrar", "borrar", "-eliminar", "eliminar" -> procesarBorrar(servicio, arg);
             case "-ver", "ver" -> procesarVer(servicio, arg);
             case "-importar", "importar" -> procesarImportar(servicio, arg);
-            default -> System.out.println("Error: Comando '" + arg[0] + "' no reconocido.");
+            default -> logger.warning("Error: Comando '" + arg[0] + "' no reconocido.");
         }
     }
 
@@ -75,7 +78,7 @@ public class RecibirArgumentos {
         if (tieneFiltros) {
             procesarFiltrar(servicio, arg);
         } else {
-            System.out.println(servicio.listar());
+            logger.info(servicio.listar());
         }
     }
 
@@ -110,7 +113,7 @@ public class RecibirArgumentos {
         }
 
         String resultado = servicio.anadir(titulo, empresa, estadoStr, fechaStr, enlace, descripcion, salario);
-        System.out.println(resultado);
+        logger.info(resultado);
     }
 
     /**
@@ -149,7 +152,7 @@ public class RecibirArgumentos {
         }
 
         String resultado = servicio.filtrar(empresaFiltro, estadoFiltro);
-        System.out.println(resultado);
+        logger.info(resultado);
     }
 
     /**
@@ -161,9 +164,9 @@ public class RecibirArgumentos {
         boolean parametroCorrecto = arg.length >= 2;
         if (parametroCorrecto) {
             int id = Integer.parseInt(arg[1]);
-            System.out.println(servicio.eliminarCandidatura(id));
+            logger.info(servicio.eliminarCandidatura(id));
         } else {
-            System.out.println("Error: Debe indicar el ID de la candidatura a eliminar. Ejemplo: -borrar 13");
+           logger.warning("Error: Debe indicar el ID de la candidatura a eliminar. Ejemplo: -borrar 13");
         }
     }
 
@@ -176,9 +179,9 @@ public class RecibirArgumentos {
         boolean parametroCorrecto = arg.length >= 2;
         if (parametroCorrecto) {
             int id = Integer.parseInt(arg[1]);
-            System.out.println(servicio.verCandidatura(id));
+            logger.info(servicio.verCandidatura(id));
         } else {
-            System.out.println("Error: Debe indicar el ID de la candidatura a consultar. Ejemplo: -ver 13");
+            logger.warning("Error: Debe indicar el ID de la candidatura a consultar. Ejemplo: -ver 13");
         }
     }
 
@@ -190,9 +193,9 @@ public class RecibirArgumentos {
     private static void procesarImportar(OfertaServicesint servicio, String[] arg) {
         boolean parametroCorrecto = arg.length >= 2;
         if (parametroCorrecto) {
-            System.out.println(servicio.importar(arg[1]));
+            logger.info(servicio.importar(arg[1]));
         } else {
-            System.out.println("Error: Debe indicar la ruta del archivo CSV a importar. Ejemplo: -importar datos.csv");
+            logger.warning("Error: Debe indicar la ruta del archivo CSV a importar. Ejemplo: -importar datos.csv");
         }
     }
 }

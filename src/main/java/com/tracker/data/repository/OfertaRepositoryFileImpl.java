@@ -13,8 +13,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class OfertaRepositoryFileImpl implements OfertaRepository {
+    private static Logger logger = Logger.getLogger("Repositorio");
 
     private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final String RUTA_FICHERO = "candidaturas.csv";
@@ -43,9 +45,9 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
                     }
                 }
             } catch (IOException e) {
-                System.out.println("Error de entrada/salida al leer el fichero: " + e.getMessage());
+                logger.warning("Error de entrada/salida al leer el fichero: " + e.getMessage());
             } catch (Exception e) {
-                System.out.println("Error al parsear datos del CSV: " + e.getMessage());
+                logger.warning("Error al parsear datos del CSV: " + e.getMessage());
             }
         }
 
@@ -116,7 +118,7 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
                 bfw.newLine();
             }
         } catch (IOException e) {
-            System.out.println("Error de entrada/salida al guardar todas las ofertas: " + e.getMessage());
+            logger.warning("Error de entrada/salida al guardar todas las ofertas: " + e.getMessage());
         }
     }
 
@@ -157,7 +159,7 @@ public class OfertaRepositoryFileImpl implements OfertaRepository {
             }
 
         } catch (Exception e) {
-            System.out.println("Error al leer el fichero: " + e.getMessage());
+            logger.warning("Error al leer el fichero: " + e.getMessage());
         }
 
         return nuevasOfertas;
