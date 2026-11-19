@@ -40,8 +40,9 @@ public class ListadoController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-
-
+        tCandidaturas.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection)->{
+            AppContext.getInstance().put("equipo",newSelection);
+        });
     }
 
     @javafx.fxml.FXML
@@ -50,7 +51,7 @@ public class ListadoController implements Initializable {
 
     @javafx.fxml.FXML
     public void onClickFiltrar(ActionEvent actionEvent) {
-        SceneNavegator.navigateToInjection("Filtrar-view.fxml","Pagina principal");
+        SceneNavegator.navigateToInjection("filtro-view.fxml","Pagina principal");
     }
 
     @javafx.fxml.FXML
@@ -60,6 +61,6 @@ public class ListadoController implements Initializable {
 
     @javafx.fxml.FXML
     public void onClickNueva(ActionEvent actionEvent) {
-        SceneNavegator.navigateToInjection("Añadir-view.fxml","Pagina principal");
+        SceneNavegator.navigateToInjection("nuevo-view.fxml","Pagina principal");
     }
 }
