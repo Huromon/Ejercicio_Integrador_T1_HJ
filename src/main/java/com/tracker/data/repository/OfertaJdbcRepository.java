@@ -44,14 +44,23 @@ public class OfertaJdbcRepository implements OfertaRepository {
             LOGGER.log(Level.SEVERE, "Error al guardar oferta", e);
             throw new AccesoDatosException("Error al guardar oferta", e);
         }
-        return null;
+        throw new AccesoDatosException("No se pudo obtener el identificador de la oferta guardada.");
     }
 
     @Override
     public void eliminar(Integer id) {
+        try (Connection conn = dataSource.getConnection()) {
+            eliminar(id, conn);
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al obtener conexión para eliminar oferta", e);
+            throw new AccesoDatosException("Error al eliminar oferta", e);
+        }
+    }
+
+    @Override
+    public void eliminar(Integer id, Connection conn) {
         String sql = "DELETE FROM OFERTA WHERE id = ?";
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -68,9 +77,18 @@ public class OfertaJdbcRepository implements OfertaRepository {
 
     @Override
     public void cambiarEstado(Integer id, Estado estado) {
+        try (Connection conn = dataSource.getConnection()) {
+            cambiarEstado(id, estado, conn);
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al obtener conexión para cambiar estado", e);
+            throw new AccesoDatosException("Error al cambiar el estado de la oferta", e);
+        }
+    }
+
+    @Override
+    public void cambiarEstado(Integer id, Estado estado, Connection conn) {
         String sql = "UPDATE OFERTA SET estado = ? WHERE id = ?";
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, estado.name());
             stmt.setInt(2, id);
             stmt.executeUpdate();

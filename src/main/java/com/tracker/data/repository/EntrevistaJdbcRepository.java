@@ -4,6 +4,7 @@ import com.tracker.data.config.DataSourceFactory;
 import com.tracker.data.entity.Entrevista;
 import com.tracker.data.entity.EntrevistaDetalle;
 import com.tracker.exception.AccesoDatosException;
+import com.tracker.exception.ValidacionException;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -20,10 +21,18 @@ public class EntrevistaJdbcRepository implements EntrevistaRepository {
 
     @Override
     public Entrevista guardar(Entrevista entrevista) {
-        String sql = "INSERT INTO ENTREVISTA (id_oferta, fecha, tipo, notas, resultado) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = dataSource.getConnection()) {
+            return guardar(entrevista, conn);
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al obtener conexión para guardar entrevista", e);
+            throw new AccesoDatosException("Error al guardar entrevista", e);
+        }
+    }
 
+    @Override
+    public Entrevista guardar(Entrevista entrevista, Connection conn) {
+        String sql = "INSERT INTO ENTREVISTA (id_oferta, fecha, tipo, notas, resultado) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, entrevista.idOferta());
             stmt.setDate(2, Date.valueOf(entrevista.fecha()));
             stmt.setString(3, entrevista.tipo());
@@ -48,7 +57,40 @@ public class EntrevistaJdbcRepository implements EntrevistaRepository {
             LOGGER.log(Level.SEVERE, "Error al guardar entrevista", e);
             throw new AccesoDatosException("Error al guardar entrevista", e);
         }
-        return null;
+        throw new AccesoDatosException("No se pudo obtener el identificador de la entrevista guardada.");
+    }
+
+    @Override
+    public Entrevista actualizar(Entrevista entrevista) {
+        if (entrevista.id() == null) {
+            throw new ValidacionException("No se puede actualizar una entrevista sin ID.");
+        }
+        String sql = "UPDATE ENTREVISTA SET fecha = ?, tipo = ?, notas = ?, resultado = ? WHERE id = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDate(1, Date.valueOf(entrevista.fecha()));
+            stmt.setString(2, entrevista.tipo());
+            stmt.setString(3, entrevista.notas());
+            stmt.setString(4, entrevista.resultado());
+            stmt.setInt(5, entrevista.id());
+            stmt.executeUpdate();
+            return entrevista;
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al actualizar entrevista", e);
+            throw new AccesoDatosException("Error al actualizar entrevista", e);
+        }
+    }
+
+    @Override
+    public void eliminarPorOferta(Integer idOferta, Connection conn) {
+        String sql = "DELETE FROM ENTREVISTA WHERE id_oferta = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idOferta);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al eliminar entrevistas de la oferta", e);
+            throw new AccesoDatosException("Error al eliminar entrevistas de la oferta", e);
+        }
     }
 
     @Override

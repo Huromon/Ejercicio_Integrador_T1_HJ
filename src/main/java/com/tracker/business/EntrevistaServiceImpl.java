@@ -37,11 +37,22 @@ public class EntrevistaServiceImpl implements EntrevistaService {
         }
         return transaccionManager.ejecutarEnTransaccion(conn -> {
             Entrevista nueva = new Entrevista(null, idOferta, fecha, tipo, notas, resultado);
-            Entrevista guardada = entrevistaRepository.guardar(nueva);
+            Entrevista guardada = entrevistaRepository.guardar(nueva, conn);
 
-            ofertaRepository.cambiarEstado(idOferta, Estado.ENTREVISTA);
+            ofertaRepository.cambiarEstado(idOferta, Estado.ENTREVISTA, conn);
             return guardada;
         });
+    }
+
+    @Override
+    public Entrevista actualizar(Integer id, LocalDate fecha, String tipo, String notas, String resultado) {
+        Entrevista existente = buscarPorId(id).orElseThrow(() ->
+                new NoEncontradoException("No se encuentra la entrevista con ID: " + id));
+        if (fecha == null) {
+            throw new ValidacionException("La fecha de la entrevista es obligatoria.");
+        }
+        return entrevistaRepository.actualizar(new Entrevista(
+                existente.id(), existente.idOferta(), fecha, tipo, notas, resultado));
     }
 
     @Override
