@@ -67,6 +67,20 @@ public class OfertaJdbcRepository implements OfertaRepository {
     }
 
     @Override
+    public void cambiarEstado(Integer id, Estado estado) {
+        String sql = "UPDATE OFERTA SET estado = ? WHERE id = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, estado.name());
+            stmt.setInt(2, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al cambiar el estado de la oferta", e);
+            throw new AccesoDatosException("Error al cambiar el estado de la oferta", e);
+        }
+    }
+
+    @Override
     public Optional<Oferta> buscarPorId(Integer id) {
         String sql = "SELECT * FROM OFERTA WHERE id = ?";
         try (Connection conn = dataSource.getConnection();
