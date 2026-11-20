@@ -1,13 +1,12 @@
 package com.tracker.data.repository;
 
+import com.tracker.data.entity.FiltroOferta;
 import com.tracker.data.entity.Oferta;
+import com.tracker.data.entity.OfertaDetalle;
+
 import java.util.List;
 
-public interface OfertaRepository {
-    List<Oferta> listarOfertas();
-    Oferta buscarPorId(Integer id);
-    void guardarOferta(Oferta oferta);
-    boolean eliminarPorId(Integer id);
-    void guardarTodas(List<Oferta> ofertas);
-    List<Oferta> importarDesdeFichero(String rutaFichero);
+public interface OfertaRepository extends Repositorio<Oferta> {
+    List<OfertaDetalle> filtrar(FiltroOferta filtro);
+    void eliminarConDependencias(Integer id);
 }
