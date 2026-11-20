@@ -70,12 +70,8 @@ public class OfertaServiceImpl implements OfertaService {
             throw new NoEncontradoException("No se encuentra la oferta con ID: " + id);
         }
         transaccionManager.ejecutarEnTransaccion(conn -> {
-            // Borrar primero las entrevistas asociadas (transacción manual controlada)
-            List<EntrevistaDetalle> entrevistas = entrevistaRepository.buscarPorOferta(id);
-            for (EntrevistaDetalle ent : entrevistas) {
-                entrevistaRepository.eliminar(ent.id());
-            }
-            ofertaRepository.eliminar(id);
+            entrevistaRepository.eliminarPorOferta(id, conn);
+            ofertaRepository.eliminar(id, conn);
             return null;
         });
     }

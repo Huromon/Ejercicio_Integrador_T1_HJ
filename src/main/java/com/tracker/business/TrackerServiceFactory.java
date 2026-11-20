@@ -39,15 +39,36 @@ public final class TrackerServiceFactory {
         entrevistaService = new EntrevistaServiceImpl(entrevistaRepository, ofertaRepository, transaccionManager);
     }
 
+    /**
+     * @return el servicio de empresas ya inicializado.
+     * @throws IllegalStateException si no se llamó a {@link #inicializar()}.
+     */
     public static EmpresaService getEmpresaService() {
+        if (empresaService == null) {
+            throw new IllegalStateException("Debe llamar a TrackerServiceFactory.inicializar() primero.");
+        }
         return empresaService;
     }
 
+    /**
+     * @return el servicio de ofertas ya inicializado.
+     * @throws IllegalStateException si no se llamó a {@link #inicializar()}.
+     */
     public static OfertaService getOfertaService() {
+        if (ofertaService == null) {
+            throw new IllegalStateException("Debe llamar a TrackerServiceFactory.inicializar() primero.");
+        }
         return ofertaService;
     }
 
+    /**
+     * @return el servicio de entrevistas ya inicializado.
+     * @throws IllegalStateException si no se llamó a {@link #inicializar()}.
+     */
     public static EntrevistaService getEntrevistaService() {
+        if (entrevistaService == null) {
+            throw new IllegalStateException("Debe llamar a TrackerServiceFactory.inicializar() primero.");
+        }
         return entrevistaService;
     }
 }
