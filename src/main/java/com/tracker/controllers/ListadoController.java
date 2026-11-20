@@ -1,6 +1,5 @@
-package com.tracker.Controllers;
+package com.tracker.controllers;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;

@@ -1,11 +1,11 @@
-package com.tracker.Controllers;
+package com.tracker.controllers;
 
 import javafx.fxml.Initializable;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class FiltroController implements Initializable {
+public class DetallesController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 

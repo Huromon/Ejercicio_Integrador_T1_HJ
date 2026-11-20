@@ -1,4 +1,4 @@
-package com.tracker.Controllers;
+package com.tracker.controllers;
 
 import javafx.fxml.Initializable;
 

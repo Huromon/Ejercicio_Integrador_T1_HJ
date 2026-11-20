@@ -1,5 +1,5 @@
 package com.tracker.presentation;
-import com.tracker.Controllers.SceneNavegator;
+import com.tracker.controllers.SceneNavegator;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

@@ -1,8 +1,7 @@
-package com.tracker.Controllers;
+package com.tracker.controllers;
 
 import com.tracker.presentation.Aplicacion;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
