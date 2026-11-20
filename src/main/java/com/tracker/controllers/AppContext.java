@@ -61,6 +61,9 @@ public class AppContext {
     public void put(String key, Object value) {
         datos.put(key, value);
     }
+    /**
+     * Elimina todos los datos compartidos del contexto.
+     */
     public void delet(){
         datos.clear();
     }

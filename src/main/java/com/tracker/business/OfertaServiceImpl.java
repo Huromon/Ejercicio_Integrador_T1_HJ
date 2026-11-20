@@ -13,6 +13,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementación de los servicios de negocio de ofertas.
+ */
 public class OfertaServiceImpl implements OfertaService {
 
     private final OfertaRepository ofertaRepository;
@@ -20,9 +23,17 @@ public class OfertaServiceImpl implements OfertaService {
     private final EntrevistaRepository entrevistaRepository;
     private final TransaccionManager transaccionManager;
 
-    public OfertaServiceImpl(OfertaRepository ofertaRepository, 
-                             EmpresaRepository empresaRepository, 
-                             EntrevistaRepository entrevistaRepository, 
+    /**
+     * Crea el servicio con los repositorios y el gestor de transacciones que debe utilizar.
+     *
+     * @param ofertaRepository      repositorio de ofertas.
+     * @param empresaRepository     repositorio de empresas.
+     * @param entrevistaRepository  repositorio de entrevistas.
+     * @param transaccionManager    gestor de transacciones.
+     */
+    public OfertaServiceImpl(OfertaRepository ofertaRepository,
+                             EmpresaRepository empresaRepository,
+                             EntrevistaRepository entrevistaRepository,
                              TransaccionManager transaccionManager) {
         this.ofertaRepository = ofertaRepository;
         this.empresaRepository = empresaRepository;
@@ -30,8 +41,22 @@ public class OfertaServiceImpl implements OfertaService {
         this.transaccionManager = transaccionManager;
     }
 
+    /**
+     * Valida la empresa y el título, y crea la oferta con valores por defecto
+     * para el estado y la fecha cuando no se indican.
+     *
+     * @param idEmpresa        identificador de la empresa asociada.
+     * @param titulo           título de la oferta, obligatorio.
+     * @param descripcion      descripción de la oferta.
+     * @param estado           estado inicial de la candidatura.
+     * @param fechaPostulacion fecha de postulación.
+     * @param enlace           enlace a la oferta.
+     * @param salario          salario ofrecido.
+     * @param notas            notas sobre la oferta.
+     * @return la oferta creada con su identificador asignado.
+     */
     @Override
-    public Oferta crear(Integer idEmpresa, String titulo, String descripcion, Estado estado, 
+    public Oferta crear(Integer idEmpresa, String titulo, String descripcion, Estado estado,
                         LocalDate fechaPostulacion, String enlace, BigDecimal salario, String notas) {
         if (idEmpresa == null || empresaRepository.buscarPorId(idEmpresa).isEmpty()) {
             throw new ValidacionException("La oferta debe estar asociada a una empresa existente.");
@@ -46,16 +71,33 @@ public class OfertaServiceImpl implements OfertaService {
         return ofertaRepository.guardar(oferta);
     }
 
+    /**
+     * Filtra ofertas por cualquier combinación de criterios; un filtro nulo devuelve todas.
+     *
+     * @param filtro criterios de filtrado.
+     * @return lista de ofertas con datos de la empresa que cumplen los criterios.
+     */
     @Override
     public List<OfertaDetalle> filtrar(FiltroOferta filtro) {
         return ofertaRepository.filtrar(filtro != null ? filtro : new FiltroOferta(null, null, null, null, null, null, null));
     }
 
+    /**
+     * Devuelve todas las ofertas registradas.
+     *
+     * @return lista de ofertas.
+     */
     @Override
     public List<Oferta> listarTodas() {
         return ofertaRepository.buscarTodos();
     }
 
+    /**
+     * Busca una oferta por su identificador.
+     *
+     * @param id identificador de la oferta.
+     * @return un {@link Optional} con la oferta si existe, o vacío en caso contrario.
+     */
     @Override
     public Optional<Oferta> buscarPorId(Integer id) {
         if (id == null) {
@@ -64,6 +106,11 @@ public class OfertaServiceImpl implements OfertaService {
         return ofertaRepository.buscarPorId(id);
     }
 
+    /**
+     * Borra las entrevistas de la oferta y la oferta usando la misma conexión transaccional.
+     *
+     * @param id identificador de la oferta a eliminar.
+     */
     @Override
     public void eliminarConDependencias(Integer id) {
         if (id == null || ofertaRepository.buscarPorId(id).isEmpty()) {
@@ -76,6 +123,12 @@ public class OfertaServiceImpl implements OfertaService {
         });
     }
 
+    /**
+     * Comprueba que la oferta existe y le asigna un nuevo estado.
+     *
+     * @param id     identificador de la oferta.
+     * @param estado nuevo estado de la candidatura.
+     */
     @Override
     public void cambiarEstado(Integer id, Estado estado) {
         if (id == null || estado == null) {

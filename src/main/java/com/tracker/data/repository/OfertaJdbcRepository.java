@@ -12,17 +12,26 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Implementación JDBC del repositorio de ofertas.
+ */
 public class OfertaJdbcRepository implements OfertaRepository {
 
     private static final Logger LOGGER = Logger.getLogger(OfertaJdbcRepository.class.getName());
     private final DataSource dataSource = DataSourceFactory.getDataSource();
 
+    /**
+     * Inserta una oferta y recupera el identificador generado por la base de datos.
+     *
+     * @param oferta oferta a guardar.
+     * @return la oferta guardada con su identificador asignado.
+     */
     @Override
     public Oferta guardar(Oferta oferta) {
         String sql = "INSERT INTO OFERTA (id_empresa, titulo, descripcion, estado, fechaPostulacion, enlace, salario, notas) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            
+             
             stmt.setInt(1, oferta.idEmpresa());
             stmt.setString(2, oferta.titulo());
             stmt.setString(3, oferta.descripcion());
@@ -31,9 +40,9 @@ public class OfertaJdbcRepository implements OfertaRepository {
             stmt.setString(6, oferta.enlace());
             stmt.setBigDecimal(7, oferta.salario());
             stmt.setString(8, oferta.notas());
-            
+             
             stmt.executeUpdate();
-            
+             
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
                     return new Oferta(rs.getInt(1), oferta.idEmpresa(), oferta.titulo(), oferta.descripcion(), 
@@ -47,6 +56,11 @@ public class OfertaJdbcRepository implements OfertaRepository {
         throw new AccesoDatosException("No se pudo obtener el identificador de la oferta guardada.");
     }
 
+    /**
+     * Elimina una oferta con su propia conexión.
+     *
+     * @param id identificador de la oferta a eliminar.
+     */
     @Override
     public void eliminar(Integer id) {
         try (Connection conn = dataSource.getConnection()) {
@@ -57,6 +71,12 @@ public class OfertaJdbcRepository implements OfertaRepository {
         }
     }
 
+    /**
+     * Elimina una oferta usando una conexión existente.
+     *
+     * @param id   identificador de la oferta a eliminar.
+     * @param conn conexión abierta por el gestor de transacciones.
+     */
     @Override
     public void eliminar(Integer id, Connection conn) {
         String sql = "DELETE FROM OFERTA WHERE id = ?";
@@ -69,12 +89,22 @@ public class OfertaJdbcRepository implements OfertaRepository {
         }
     }
 
+    /**
+     * Elimina la oferta; la gestión transaccional de las dependencias se realiza en el servicio.
+     *
+     * @param id identificador de la oferta a eliminar.
+     */
     @Override
     public void eliminarConDependencias(Integer id) {
-        // La gestión transaccional se hará en el servicio, aquí solo borramos
         eliminar(id);
     }
 
+    /**
+     * Cambia el estado de una oferta con su propia conexión.
+     *
+     * @param id     identificador de la oferta.
+     * @param estado nuevo estado de la candidatura.
+     */
     @Override
     public void cambiarEstado(Integer id, Estado estado) {
         try (Connection conn = dataSource.getConnection()) {
@@ -85,6 +115,13 @@ public class OfertaJdbcRepository implements OfertaRepository {
         }
     }
 
+    /**
+     * Cambia el estado de una oferta usando una conexión existente.
+     *
+     * @param id     identificador de la oferta.
+     * @param estado nuevo estado de la candidatura.
+     * @param conn   conexión abierta por el gestor de transacciones.
+     */
     @Override
     public void cambiarEstado(Integer id, Estado estado, Connection conn) {
         String sql = "UPDATE OFERTA SET estado = ? WHERE id = ?";
@@ -98,6 +135,12 @@ public class OfertaJdbcRepository implements OfertaRepository {
         }
     }
 
+    /**
+     * Busca una oferta por su identificador.
+     *
+     * @param id identificador de la oferta.
+     * @return un {@link Optional} con la oferta si existe, o vacío en caso contrario.
+     */
     @Override
     public Optional<Oferta> buscarPorId(Integer id) {
         String sql = "SELECT * FROM OFERTA WHERE id = ?";
@@ -116,6 +159,11 @@ public class OfertaJdbcRepository implements OfertaRepository {
         return Optional.empty();
     }
 
+    /**
+     * Devuelve todas las ofertas registradas.
+     *
+     * @return lista de ofertas.
+     */
     @Override
     public List<Oferta> buscarTodos() {
         String sql = "SELECT * FROM OFERTA";
@@ -133,6 +181,12 @@ public class OfertaJdbcRepository implements OfertaRepository {
         return ofertas;
     }
 
+    /**
+     * Busca ofertas con JOIN a EMPRESA aplicando todos los criterios no nulos del filtro.
+     *
+     * @param filtro criterios de filtrado.
+     * @return lista de ofertas con el nombre de la empresa.
+     */
     @Override
     public List<OfertaDetalle> filtrar(FiltroOferta filtro) {
         StringBuilder sql = new StringBuilder(
@@ -170,6 +224,13 @@ public class OfertaJdbcRepository implements OfertaRepository {
         return resultados;
     }
 
+    /**
+     * Convierte la fila actual del resultado en una entidad de oferta.
+     *
+     * @param rs resultado situado en la fila a convertir.
+     * @return la oferta creada a partir de la fila.
+     * @throws SQLException si no se puede leer alguna columna.
+     */
     private Oferta mapRow(ResultSet rs) throws SQLException {
         return new Oferta(rs.getInt("id"), rs.getInt("id_empresa"), rs.getString("titulo"), rs.getString("descripcion"),
             Estado.desdeTexto(rs.getString("estado")), rs.getDate("fechaPostulacion").toLocalDate(), 

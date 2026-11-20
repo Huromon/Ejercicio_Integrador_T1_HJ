@@ -21,10 +21,18 @@ public class TransaccionManager {
     private static final Logger LOGGER = Logger.getLogger(TransaccionManager.class.getName());
     private final DataSource dataSource;
 
+    /**
+     * Crea el gestor con el origen de datos de la base de datos de la aplicación.
+     */
     public TransaccionManager() {
         this(DataSourceFactory.getDataSource());
     }
 
+    /**
+     * Crea el gestor con un origen de datos concreto.
+     *
+     * @param dataSource origen de datos que aporta las conexiones transaccionales.
+     */
     public TransaccionManager(DataSource dataSource) {
         this.dataSource = dataSource;
     }

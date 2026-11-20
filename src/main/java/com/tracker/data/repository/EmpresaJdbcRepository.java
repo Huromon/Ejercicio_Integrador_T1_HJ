@@ -13,24 +13,33 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Implementación JDBC del repositorio de empresas.
+ */
 public class EmpresaJdbcRepository implements EmpresaRepository {
 
     private static final Logger LOGGER = Logger.getLogger(EmpresaJdbcRepository.class.getName());
     private final DataSource dataSource = DataSourceFactory.getDataSource();
 
+    /**
+     * Inserta una empresa y recupera el identificador generado por la base de datos.
+     *
+     * @param empresa empresa a guardar.
+     * @return la empresa guardada con su identificador asignado.
+     */
     @Override
     public Empresa guardar(Empresa empresa) {
         String sql = "INSERT INTO EMPRESA (nombre, sector, web, fechaRegistro) VALUES (?, ?, ?, ?)";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            
+             
             stmt.setString(1, empresa.nombre());
             stmt.setString(2, empresa.sector());
             stmt.setString(3, empresa.web());
             stmt.setDate(4, Date.valueOf(empresa.fechaRegistro()));
-            
+             
             stmt.executeUpdate();
-            
+             
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
                     return new Empresa(rs.getInt(1), empresa.nombre(), empresa.sector(), empresa.web(), empresa.fechaRegistro());
@@ -43,6 +52,12 @@ public class EmpresaJdbcRepository implements EmpresaRepository {
         throw new AccesoDatosException("No se pudo obtener el identificador de la empresa guardada.");
     }
 
+    /**
+     * Modifica todos los datos de una empresa existente.
+     *
+     * @param empresa empresa con los datos actualizados y su identificador.
+     * @return la empresa actualizada.
+     */
     @Override
     public Empresa actualizar(Empresa empresa) {
         if (empresa.id() == null) {
@@ -64,6 +79,11 @@ public class EmpresaJdbcRepository implements EmpresaRepository {
         }
     }
 
+    /**
+     * Elimina una empresa por su identificador.
+     *
+     * @param id identificador de la empresa a eliminar.
+     */
     @Override
     public void eliminar(Integer id) {
         String sql = "DELETE FROM EMPRESA WHERE id = ?";
@@ -77,6 +97,12 @@ public class EmpresaJdbcRepository implements EmpresaRepository {
         }
     }
 
+    /**
+     * Busca una empresa por su identificador.
+     *
+     * @param id identificador de la empresa.
+     * @return un {@link Optional} con la empresa si existe, o vacío en caso contrario.
+     */
     @Override
     public Optional<Empresa> buscarPorId(Integer id) {
         String sql = "SELECT * FROM EMPRESA WHERE id = ?";
@@ -95,6 +121,11 @@ public class EmpresaJdbcRepository implements EmpresaRepository {
         return Optional.empty();
     }
 
+    /**
+     * Devuelve todas las empresas registradas.
+     *
+     * @return lista de empresas.
+     */
     @Override
     public List<Empresa> buscarTodos() {
         String sql = "SELECT * FROM EMPRESA";
@@ -112,6 +143,12 @@ public class EmpresaJdbcRepository implements EmpresaRepository {
         return empresas;
     }
 
+    /**
+     * Busca una empresa por su nombre exacto.
+     *
+     * @param nombre nombre de la empresa.
+     * @return un {@link Optional} con la empresa si existe, o vacío en caso contrario.
+     */
     @Override
     public Optional<Empresa> buscarPorNombre(String nombre) {
         String sql = "SELECT * FROM EMPRESA WHERE nombre = ?";
@@ -130,6 +167,13 @@ public class EmpresaJdbcRepository implements EmpresaRepository {
         return Optional.empty();
     }
 
+    /**
+     * Convierte la fila actual del resultado en una entidad de empresa.
+     *
+     * @param rs resultado situado en la fila a convertir.
+     * @return la empresa creada a partir de la fila.
+     * @throws SQLException si no se puede leer alguna columna.
+     */
     private Empresa mapRow(ResultSet rs) throws SQLException {
         return new Empresa(
             rs.getInt("id"),

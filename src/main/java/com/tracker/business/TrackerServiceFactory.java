@@ -17,6 +17,9 @@ public final class TrackerServiceFactory {
     private static OfertaService ofertaService;
     private static EntrevistaService entrevistaService;
 
+    /**
+     * Constructor privado para impedir la creación de instancias de la factoría.
+     */
     private TrackerServiceFactory() {
     }
 

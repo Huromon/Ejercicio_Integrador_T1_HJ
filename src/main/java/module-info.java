@@ -1,3 +1,6 @@
+/**
+ * Módulo de la aplicación de seguimiento de candidaturas laborales v2.0.
+ */
 module EjercicioIntegrador {
     requires java.logging;
     requires java.sql;

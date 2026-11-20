@@ -13,12 +13,22 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementación de los servicios de negocio de entrevistas.
+ */
 public class EntrevistaServiceImpl implements EntrevistaService {
 
     private final EntrevistaRepository entrevistaRepository;
     private final OfertaRepository ofertaRepository;
     private final TransaccionManager transaccionManager;
 
+    /**
+     * Crea el servicio con los repositorios y el gestor de transacciones que debe utilizar.
+     *
+     * @param entrevistaRepository repositorio de entrevistas.
+     * @param ofertaRepository     repositorio de ofertas.
+     * @param transaccionManager   gestor de transacciones.
+     */
     public EntrevistaServiceImpl(EntrevistaRepository entrevistaRepository,
                                  OfertaRepository ofertaRepository,
                                  TransaccionManager transaccionManager) {
@@ -27,6 +37,16 @@ public class EntrevistaServiceImpl implements EntrevistaService {
         this.transaccionManager = transaccionManager;
     }
 
+    /**
+     * Inserta la entrevista y cambia el estado de la oferta en la misma transacción.
+     *
+     * @param idOferta  identificador de la oferta a la que pertenece la entrevista.
+     * @param fecha     fecha de la entrevista, obligatoria.
+     * @param tipo      tipo de entrevista.
+     * @param notas     notas sobre la entrevista.
+     * @param resultado resultado de la entrevista.
+     * @return la entrevista registrada con su identificador asignado.
+     */
     @Override
     public Entrevista registrar(Integer idOferta, LocalDate fecha, String tipo, String notas, String resultado) {
         if (idOferta == null || ofertaRepository.buscarPorId(idOferta).isEmpty()) {
@@ -44,6 +64,16 @@ public class EntrevistaServiceImpl implements EntrevistaService {
         });
     }
 
+    /**
+     * Valida los datos y actualiza una entrevista, conservando su identificador y su oferta.
+     *
+     * @param id        identificador de la entrevista a modificar.
+     * @param fecha     nueva fecha de la entrevista, obligatoria.
+     * @param tipo      nuevo tipo de entrevista.
+     * @param notas     nuevas notas sobre la entrevista.
+     * @param resultado nuevo resultado de la entrevista.
+     * @return la entrevista con los datos actualizados.
+     */
     @Override
     public Entrevista actualizar(Integer id, LocalDate fecha, String tipo, String notas, String resultado) {
         Entrevista existente = buscarPorId(id).orElseThrow(() ->
@@ -55,11 +85,22 @@ public class EntrevistaServiceImpl implements EntrevistaService {
                 existente.id(), existente.idOferta(), fecha, tipo, notas, resultado));
     }
 
+    /**
+     * Devuelve todas las entrevistas registradas.
+     *
+     * @return lista de entrevistas.
+     */
     @Override
     public List<Entrevista> listarTodas() {
         return entrevistaRepository.buscarTodos();
     }
 
+    /**
+     * Devuelve las entrevistas de una oferta junto con datos de la oferta y la empresa.
+     *
+     * @param idOferta identificador de la oferta.
+     * @return lista de detalles de entrevistas.
+     */
     @Override
     public List<EntrevistaDetalle> listarPorOferta(Integer idOferta) {
         if (idOferta == null) {
@@ -68,6 +109,12 @@ public class EntrevistaServiceImpl implements EntrevistaService {
         return entrevistaRepository.buscarPorOferta(idOferta);
     }
 
+    /**
+     * Busca una entrevista por su identificador.
+     *
+     * @param id identificador de la entrevista.
+     * @return un {@link Optional} con la entrevista si existe, o vacío en caso contrario.
+     */
     @Override
     public Optional<Entrevista> buscarPorId(Integer id) {
         if (id == null) {
@@ -76,6 +123,11 @@ public class EntrevistaServiceImpl implements EntrevistaService {
         return entrevistaRepository.buscarPorId(id);
     }
 
+    /**
+     * Comprueba que la entrevista existe y la elimina.
+     *
+     * @param id identificador de la entrevista a eliminar.
+     */
     @Override
     public void eliminar(Integer id) {
         if (id == null || entrevistaRepository.buscarPorId(id).isEmpty()) {

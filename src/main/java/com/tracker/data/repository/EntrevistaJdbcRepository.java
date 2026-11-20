@@ -14,11 +14,20 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Implementación JDBC del repositorio de entrevistas.
+ */
 public class EntrevistaJdbcRepository implements EntrevistaRepository {
 
     private static final Logger LOGGER = Logger.getLogger(EntrevistaJdbcRepository.class.getName());
     private final DataSource dataSource = DataSourceFactory.getDataSource();
 
+    /**
+     * Inserta una entrevista con su propia conexión.
+     *
+     * @param entrevista entrevista a guardar.
+     * @return la entrevista guardada con su identificador asignado.
+     */
     @Override
     public Entrevista guardar(Entrevista entrevista) {
         try (Connection conn = dataSource.getConnection()) {
@@ -29,6 +38,13 @@ public class EntrevistaJdbcRepository implements EntrevistaRepository {
         }
     }
 
+    /**
+     * Inserta una entrevista usando una conexión existente y recupera su clave generada.
+     *
+     * @param entrevista entrevista a guardar.
+     * @param conn       conexión abierta por el gestor de transacciones.
+     * @return la entrevista guardada con su identificador asignado.
+     */
     @Override
     public Entrevista guardar(Entrevista entrevista, Connection conn) {
         String sql = "INSERT INTO ENTREVISTA (id_oferta, fecha, tipo, notas, resultado) VALUES (?, ?, ?, ?, ?)";
@@ -60,6 +76,12 @@ public class EntrevistaJdbcRepository implements EntrevistaRepository {
         throw new AccesoDatosException("No se pudo obtener el identificador de la entrevista guardada.");
     }
 
+    /**
+     * Modifica la fecha, el tipo, las notas y el resultado de una entrevista.
+     *
+     * @param entrevista entrevista con los datos actualizados y su identificador.
+     * @return la entrevista actualizada.
+     */
     @Override
     public Entrevista actualizar(Entrevista entrevista) {
         if (entrevista.id() == null) {
@@ -81,6 +103,12 @@ public class EntrevistaJdbcRepository implements EntrevistaRepository {
         }
     }
 
+    /**
+     * Borra todas las entrevistas de una oferta usando una conexión existente.
+     *
+     * @param idOferta identificador de la oferta.
+     * @param conn     conexión abierta por el gestor de transacciones.
+     */
     @Override
     public void eliminarPorOferta(Integer idOferta, Connection conn) {
         String sql = "DELETE FROM ENTREVISTA WHERE id_oferta = ?";
@@ -93,6 +121,11 @@ public class EntrevistaJdbcRepository implements EntrevistaRepository {
         }
     }
 
+    /**
+     * Elimina una entrevista por su identificador.
+     *
+     * @param id identificador de la entrevista a eliminar.
+     */
     @Override
     public void eliminar(Integer id) {
         String sql = "DELETE FROM ENTREVISTA WHERE id = ?";
@@ -106,6 +139,12 @@ public class EntrevistaJdbcRepository implements EntrevistaRepository {
         }
     }
 
+    /**
+     * Busca una entrevista por su identificador.
+     *
+     * @param id identificador de la entrevista.
+     * @return un {@link Optional} con la entrevista si existe, o vacío en caso contrario.
+     */
     @Override
     public Optional<Entrevista> buscarPorId(Integer id) {
         String sql = "SELECT * FROM ENTREVISTA WHERE id = ?";
@@ -124,6 +163,11 @@ public class EntrevistaJdbcRepository implements EntrevistaRepository {
         return Optional.empty();
     }
 
+    /**
+     * Devuelve todas las entrevistas registradas.
+     *
+     * @return lista de entrevistas.
+     */
     @Override
     public List<Entrevista> buscarTodos() {
         String sql = "SELECT * FROM ENTREVISTA";
@@ -141,6 +185,12 @@ public class EntrevistaJdbcRepository implements EntrevistaRepository {
         return entrevistas;
     }
 
+    /**
+     * Busca las entrevistas de una oferta con JOIN a OFERTA y EMPRESA.
+     *
+     * @param idOferta identificador de la oferta.
+     * @return lista de detalles de entrevistas.
+     */
     @Override
     public List<EntrevistaDetalle> buscarPorOferta(Integer idOferta) {
         String sql = "SELECT en.id, en.id_oferta, o.titulo as tituloOferta, e.nombre as empresa, " +
@@ -174,6 +224,13 @@ public class EntrevistaJdbcRepository implements EntrevistaRepository {
         return detalles;
     }
 
+    /**
+     * Convierte la fila actual del resultado en una entidad de entrevista.
+     *
+     * @param rs resultado situado en la fila a convertir.
+     * @return la entrevista creada a partir de la fila.
+     * @throws SQLException si no se puede leer alguna columna.
+     */
     private Entrevista mapRow(ResultSet rs) throws SQLException {
         return new Entrevista(
                 rs.getInt("id"),

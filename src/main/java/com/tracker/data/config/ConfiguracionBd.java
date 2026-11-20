@@ -20,6 +20,12 @@ public final class ConfiguracionBd {
     private final String usuario;
     private final String password;
 
+    /**
+     * Crea la configuración con las credenciales leídas del entorno.
+     *
+     * @param usuario  usuario de MySQL.
+     * @param password contraseña de MySQL.
+     */
     private ConfiguracionBd(String usuario, String password) {
         this.usuario = usuario;
         this.password = password;

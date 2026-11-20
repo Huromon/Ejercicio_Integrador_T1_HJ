@@ -17,6 +17,9 @@ public final class DataSourceFactory {
     private static DataSource dataSource;
     private static DataSource dataSourceServidor;
 
+    /**
+     * Constructor privado para impedir la creación de instancias de la factoría.
+     */
     private DataSourceFactory() {
     }
 
@@ -44,6 +47,12 @@ public final class DataSourceFactory {
         return dataSourceServidor;
     }
 
+    /**
+     * Configura un origen de datos MySQL con la URL y las credenciales del entorno.
+     *
+     * @param url URL JDBC de conexión.
+     * @return el origen de datos configurado.
+     */
     private static DataSource crearDataSource(String url) {
         ConfiguracionBd configuracion = ConfiguracionBd.desdeEntorno();
 

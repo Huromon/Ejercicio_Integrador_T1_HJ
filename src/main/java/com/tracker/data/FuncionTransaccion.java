@@ -10,5 +10,13 @@ import java.sql.SQLException;
  */
 @FunctionalInterface
 public interface FuncionTransaccion<T> {
+
+    /**
+     * Ejecuta la operación dentro de la conexión transaccional.
+     *
+     * @param conn conexión con el autocommit desactivado.
+     * @return el resultado de la operación.
+     * @throws SQLException si falla alguna sentencia SQL.
+     */
     T ejecutar(Connection conn) throws SQLException;
 }

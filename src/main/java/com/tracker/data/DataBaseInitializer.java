@@ -22,6 +22,9 @@ public final class DataBaseInitializer {
 
     private static final Logger LOGGER = Logger.getLogger(DataBaseInitializer.class.getName());
 
+    /**
+     * Constructor privado para impedir la creación de instancias del inicializador.
+     */
     private DataBaseInitializer() {
     }
 
@@ -37,6 +40,12 @@ public final class DataBaseInitializer {
         }
     }
 
+    /**
+     * Ejecuta todas las sentencias separadas por punto y coma de un script SQL.
+     *
+     * @param nombreArchivo recurso que contiene el script.
+     * @param dataSource    origen de datos sobre el que se ejecuta.
+     */
     private static void ejecutarScript(String nombreArchivo, DataSource dataSource) {
         try (Connection conn = dataSource.getConnection();
              InputStream is = DataBaseInitializer.class.getResourceAsStream(nombreArchivo);
@@ -54,13 +63,18 @@ public final class DataBaseInitializer {
         }
     }
 
+    /**
+     * Comprueba si la tabla de empresas no contiene registros.
+     *
+     * @return {@code true} si la tabla está vacía o no se puede consultar.
+     */
     private static boolean estaVacia() {
         try (Connection conn = DataSourceFactory.getDataSource().getConnection();
              Statement stmt = conn.createStatement()) {
             var rs = stmt.executeQuery("SELECT COUNT(*) FROM EMPRESA");
             return rs.next() && rs.getInt(1) == 0;
         } catch (Exception e) {
-            return true; // Si no se puede consultar, asumimos vacía o error de inicialización
+            return true;
         }
     }
 }
