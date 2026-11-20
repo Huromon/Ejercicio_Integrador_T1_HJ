@@ -6,6 +6,7 @@ import java.util.Optional;
 
 public interface EmpresaService {
     Empresa crear(String nombre, String sector, String web);
+    Empresa actualizar(Integer id, String nombre, String sector, String web);
     List<Empresa> listarTodas();
     Optional<Empresa> buscarPorId(Integer id);
     void eliminar(Integer id);

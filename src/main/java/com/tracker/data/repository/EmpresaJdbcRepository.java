@@ -3,6 +3,7 @@ package com.tracker.data.repository;
 import com.tracker.data.config.DataSourceFactory;
 import com.tracker.data.entity.Empresa;
 import com.tracker.exception.AccesoDatosException;
+import com.tracker.exception.ValidacionException;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -39,7 +40,28 @@ public class EmpresaJdbcRepository implements EmpresaRepository {
             LOGGER.log(Level.SEVERE, "Error al guardar empresa", e);
             throw new AccesoDatosException("Error al guardar empresa", e);
         }
-        return null;
+        throw new AccesoDatosException("No se pudo obtener el identificador de la empresa guardada.");
+    }
+
+    @Override
+    public Empresa actualizar(Empresa empresa) {
+        if (empresa.id() == null) {
+            throw new ValidacionException("No se puede actualizar una empresa sin ID.");
+        }
+        String sql = "UPDATE EMPRESA SET nombre = ?, sector = ?, web = ?, fechaRegistro = ? WHERE id = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, empresa.nombre());
+            stmt.setString(2, empresa.sector());
+            stmt.setString(3, empresa.web());
+            stmt.setDate(4, Date.valueOf(empresa.fechaRegistro()));
+            stmt.setInt(5, empresa.id());
+            stmt.executeUpdate();
+            return empresa;
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al actualizar empresa", e);
+            throw new AccesoDatosException("Error al actualizar empresa", e);
+        }
     }
 
     @Override

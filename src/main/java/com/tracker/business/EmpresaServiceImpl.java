@@ -30,6 +30,21 @@ public class EmpresaServiceImpl implements EmpresaService {
     }
 
     @Override
+    public Empresa actualizar(Integer id, String nombre, String sector, String web) {
+        Empresa existente = buscarPorId(id).orElseThrow(() ->
+                new NoEncontradoException("No se encuentra la empresa con ID: " + id));
+        if (nombre == null || nombre.isBlank()) {
+            throw new ValidacionException("El nombre de la empresa es obligatorio.");
+        }
+        Empresa duplicada = empresaRepository.buscarPorNombre(nombre.trim()).orElse(null);
+        if (duplicada != null && !duplicada.id().equals(id)) {
+            throw new ValidacionException("Ya existe una empresa con ese nombre.");
+        }
+        return empresaRepository.actualizar(new Empresa(
+                existente.id(), nombre.trim(), sector, web, existente.fechaRegistro()));
+    }
+
+    @Override
     public List<Empresa> listarTodas() {
         return empresaRepository.buscarTodos();
     }

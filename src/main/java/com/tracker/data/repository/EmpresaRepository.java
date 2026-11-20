@@ -5,4 +5,5 @@ import java.util.Optional;
 
 public interface EmpresaRepository extends Repositorio<Empresa> {
     Optional<Empresa> buscarPorNombre(String nombre);
+    Empresa actualizar(Empresa empresa);
 }
