@@ -12,4 +12,5 @@ public interface OfertaService {
     List<Oferta> listarTodas();
     Optional<Oferta> buscarPorId(Integer id);
     void eliminarConDependencias(Integer id);
+    void cambiarEstado(Integer id, Estado estado);
 }

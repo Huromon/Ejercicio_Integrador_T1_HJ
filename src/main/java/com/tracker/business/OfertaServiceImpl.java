@@ -79,4 +79,15 @@ public class OfertaServiceImpl implements OfertaService {
             return null;
         });
     }
+
+    @Override
+    public void cambiarEstado(Integer id, Estado estado) {
+        if (id == null || estado == null) {
+            throw new ValidacionException("El ID y el estado de la oferta son obligatorios.");
+        }
+        if (ofertaRepository.buscarPorId(id).isEmpty()) {
+            throw new NoEncontradoException("No se encuentra la oferta con ID: " + id);
+        }
+        ofertaRepository.cambiarEstado(id, estado);
+    }
 }

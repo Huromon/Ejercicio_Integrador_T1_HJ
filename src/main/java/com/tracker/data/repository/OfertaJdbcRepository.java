@@ -125,6 +125,14 @@ public class OfertaJdbcRepository implements OfertaRepository {
         if (filtro.empresa() != null) { sql.append(" AND e.nombre LIKE ?"); params.add("%" + filtro.empresa() + "%"); }
         if (filtro.estado() != null) { sql.append(" AND o.estado = ?"); params.add(filtro.estado().name()); }
         if (filtro.salarioMin() != null) { sql.append(" AND o.salario >= ?"); params.add(filtro.salarioMin()); }
+        if (filtro.salarioMax() != null) { sql.append(" AND o.salario <= ?"); params.add(filtro.salarioMax()); }
+        if (filtro.fechaDesde() != null) { sql.append(" AND o.fechaPostulacion >= ?"); params.add(Date.valueOf(filtro.fechaDesde())); }
+        if (filtro.fechaHasta() != null) { sql.append(" AND o.fechaPostulacion <= ?"); params.add(Date.valueOf(filtro.fechaHasta())); }
+        if (filtro.texto() != null && !filtro.texto().isBlank()) {
+            sql.append(" AND (o.titulo LIKE ? OR o.descripcion LIKE ?)");
+            params.add("%" + filtro.texto() + "%");
+            params.add("%" + filtro.texto() + "%");
+        }
         
         List<OfertaDetalle> resultados = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
