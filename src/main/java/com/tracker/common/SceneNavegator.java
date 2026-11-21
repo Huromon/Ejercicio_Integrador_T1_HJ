@@ -1,5 +1,9 @@
-package com.tracker.controllers;
+package com.tracker.common;
 
+import com.tracker.controllers.AñadirController;
+import com.tracker.controllers.DetallesController;
+import com.tracker.controllers.FiltroController;
+import com.tracker.controllers.ListadoController;
 import com.tracker.presentation.Aplicacion;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

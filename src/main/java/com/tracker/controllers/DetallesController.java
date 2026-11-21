@@ -1,5 +1,6 @@
 package com.tracker.controllers;
 
+import com.tracker.common.SceneNavegator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

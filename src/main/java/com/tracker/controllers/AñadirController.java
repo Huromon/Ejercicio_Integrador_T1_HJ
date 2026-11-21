@@ -1,5 +1,6 @@
 package com.tracker.controllers;
 
+import com.tracker.common.SceneNavegator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -56,7 +57,7 @@ public class AñadirController implements Initializable {
 
 
     public void onClickAñadir(ActionEvent actionEvent) {
-        SceneNavegator.navigateToInjection("main-View.fxml","Pagina Principal");
+        SceneNavegator.navigateToInjection("main-view.fxml","Pagina Principal");
     }
 
     public void onClickCancelar(ActionEvent actionEvent) {

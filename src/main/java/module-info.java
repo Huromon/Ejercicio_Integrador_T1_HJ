@@ -15,4 +15,6 @@ module EjercicioIntegrador {
 
     opens com.tracker.controllers;
     exports com.tracker.controllers to javafx.fxml;
+    exports com.tracker.common to javafx.fxml;
+    opens com.tracker.common;
 }

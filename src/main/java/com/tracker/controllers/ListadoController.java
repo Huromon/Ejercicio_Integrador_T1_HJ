@@ -1,5 +1,7 @@
 package com.tracker.controllers;
 
+import com.tracker.common.AppContext;
+import com.tracker.common.SceneNavegator;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -49,7 +51,8 @@ public class ListadoController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         tCandidaturas.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection)->{
-            AppContext.getInstance().put("equipo",newSelection);
+            AppContext.getInstance().put("oferta",newSelection);
+
         });
     }
 
@@ -69,7 +72,7 @@ public class ListadoController implements Initializable {
      */
     @javafx.fxml.FXML
     public void onClickFiltrar(ActionEvent actionEvent) {
-        SceneNavegator.navigateToInjection("filtro-view.fxml","Pagina principal");
+        SceneNavegator.navigateToInjection("filtro-view.fxml","Filtrar");
     }
 
     /**
@@ -89,6 +92,6 @@ public class ListadoController implements Initializable {
      */
     @javafx.fxml.FXML
     public void onClickNueva(ActionEvent actionEvent) {
-        SceneNavegator.navigateToInjection("nuevo-view.fxml","Pagina principal");
+        SceneNavegator.navigateToInjection("nuevo-view.fxml","Añadir");
     }
 }

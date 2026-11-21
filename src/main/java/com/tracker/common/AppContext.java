@@ -1,4 +1,4 @@
-package com.tracker.controllers;
+package com.tracker.common;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
