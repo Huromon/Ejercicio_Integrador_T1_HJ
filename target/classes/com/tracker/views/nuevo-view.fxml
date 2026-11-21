@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<BorderPane xmlns="http://javafx.com/javafx/27" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tracker.controllers.AñadirController">
+<BorderPane xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tracker.controllers.AñadirController">
    <center>
       <VBox fillWidth="false" prefWidth="450.0" spacing="7.0" BorderPane.alignment="CENTER">
          <children>

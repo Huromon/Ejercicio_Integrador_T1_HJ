@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<BorderPane prefWidth="544.0" xmlns="http://javafx.com/javafx/27" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tracker.controllers.FiltroController">
+<BorderPane prefWidth="544.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tracker.controllers.FiltroController">
    <center>
       <VBox prefWidth="544.0" spacing="7.0">
          <children>

@@ -10,7 +10,7 @@
 <?import javafx.scene.text.TextFlow?>
 
 
-<BorderPane xmlns="http://javafx.com/javafx/27" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tracker.controllers.DetallesController">
+<BorderPane xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tracker.controllers.DetallesController">
    <center>
       <VBox alignment="CENTER" fillWidth="false" spacing="6.0" BorderPane.alignment="CENTER">
          <children>
