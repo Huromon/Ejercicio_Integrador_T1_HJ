@@ -1,5 +1,6 @@
 package com.tracker.business;
 
+import com.tracker.common.AppContext;
 import com.tracker.data.TransaccionManager;
 import com.tracker.data.entity.Entrevista;
 import com.tracker.data.entity.EntrevistaDetalle;
@@ -35,6 +36,7 @@ public class EntrevistaServiceImpl implements EntrevistaService {
         this.entrevistaRepository = entrevistaRepository;
         this.ofertaRepository = ofertaRepository;
         this.transaccionManager = transaccionManager;
+        AppContext.getInstance().put("entrevistaService", this );
     }
 
     /**

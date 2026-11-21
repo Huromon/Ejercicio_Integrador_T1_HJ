@@ -1,5 +1,6 @@
 package com.tracker.business;
 
+import com.tracker.common.AppContext;
 import com.tracker.data.TransaccionManager;
 import com.tracker.data.entity.*;
 import com.tracker.data.repository.EmpresaRepository;
@@ -39,6 +40,7 @@ public class OfertaServiceImpl implements OfertaService {
         this.empresaRepository = empresaRepository;
         this.entrevistaRepository = entrevistaRepository;
         this.transaccionManager = transaccionManager;
+        AppContext.getInstance().put("ofertasevices",this);
     }
 
     /**

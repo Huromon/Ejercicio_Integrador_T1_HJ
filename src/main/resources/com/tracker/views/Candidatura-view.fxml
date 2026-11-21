@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.TextFlow?>
 
 <BorderPane xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tracker.controllers.DetallesController">
    <center>
@@ -62,7 +61,7 @@
             <HBox alignment="TOP_CENTER" spacing="5.0">
                <children>
                   <Label text="Descripcion:" />
-                  <TextFlow fx:id="textFlowDescripcion" prefHeight="75.0" prefWidth="390.0" />
+                  <Label fx:id="txtDescripcion" alignment="TOP_LEFT" prefHeight="55.0" prefWidth="263.0" text="Label" />
                </children>
             </HBox>
             <VBox>

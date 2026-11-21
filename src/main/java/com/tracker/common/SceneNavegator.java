@@ -4,6 +4,7 @@ import com.tracker.controllers.AñadirController;
 import com.tracker.controllers.DetallesController;
 import com.tracker.controllers.FiltroController;
 import com.tracker.controllers.ListadoController;
+import com.tracker.data.entity.Oferta;
 import com.tracker.presentation.Aplicacion;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -58,12 +59,14 @@ public class SceneNavegator {
         FXMLLoader fxmlLoader = new FXMLLoader(Aplicacion.class.getResource("/com/tracker/views/" + fxml));
 
 
+
+
         fxmlLoader.setControllerFactory(type -> {
             switch (fxml) {
                 case "nuevo-view.fxml":   return new AñadirController();
                 case "main-view.fxml":    return new ListadoController();
                 case "filtro-view.fxml": return new FiltroController();
-                case "Candidarura-view.fxml": return new DetallesController();
+                case "Candidatura-view.fxml": return new DetallesController();
             }
             throw new IllegalArgumentException("Vista no soportada: " + fxml);
         });
@@ -72,7 +75,7 @@ public class SceneNavegator {
             stage.setTitle(title);
             stage.setScene(scene);
         }catch (IOException e){
-            System.out.println("lol");
+
         }
     }
 }

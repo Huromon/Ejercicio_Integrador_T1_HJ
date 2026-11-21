@@ -22,6 +22,7 @@ public class EmpresaServiceImpl implements EmpresaService {
      * @param empresaRepository repositorio de empresas.
      */
     public EmpresaServiceImpl(EmpresaRepository empresaRepository) {
+
         this.empresaRepository = empresaRepository;
     }
 
@@ -62,11 +63,11 @@ public class EmpresaServiceImpl implements EmpresaService {
             throw new ValidacionException("El nombre de la empresa es obligatorio.");
         }
         Empresa duplicada = empresaRepository.buscarPorNombre(nombre.trim()).orElse(null);
-        if (duplicada != null && !duplicada.id().equals(id)) {
+        if (duplicada != null && !duplicada.getId().equals(id)) {
             throw new ValidacionException("Ya existe una empresa con ese nombre.");
         }
         return empresaRepository.actualizar(new Empresa(
-                existente.id(), nombre.trim(), sector, web, existente.fechaRegistro()));
+                existente.getId(), nombre.trim(), sector, web, existente.getFechaRegistro()));
     }
 
     /**

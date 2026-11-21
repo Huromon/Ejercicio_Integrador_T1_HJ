@@ -1,5 +1,6 @@
 package com.tracker.data;
 
+import com.tracker.common.AppContext;
 import com.tracker.data.config.DataSourceFactory;
 import com.tracker.exception.AccesoDatosException;
 
@@ -26,6 +27,7 @@ public class TransaccionManager {
      */
     public TransaccionManager() {
         this(DataSourceFactory.getDataSource());
+        AppContext.getInstance().put("datasource",this.dataSource);
     }
 
     /**
@@ -35,6 +37,7 @@ public class TransaccionManager {
      */
     public TransaccionManager(DataSource dataSource) {
         this.dataSource = dataSource;
+        AppContext.getInstance().put("datasource",this.dataSource);
     }
 
     /**

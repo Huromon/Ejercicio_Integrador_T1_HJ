@@ -20,7 +20,7 @@ public class AñadirController implements Initializable {
     private Button btnCancelar;
 
     @FXML
-    private ChoiceBox<?> choiceboxEstado;
+    private ChoiceBox<String> choiceboxEstado;
 
     @FXML
     private DatePicker dateFechaPostulacion;
@@ -51,7 +51,13 @@ public class AñadirController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        choiceboxEstado.getItems().addAll(
+                "Pendiente",
+                "Entrevista",
+                "Aceptada",
+                "Rechazada"
+        );
+        choiceboxEstado.getSelectionModel().selectFirst();
     }
 
 

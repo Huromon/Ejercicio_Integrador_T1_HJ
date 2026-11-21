@@ -1,6 +1,10 @@
 package com.tracker.controllers;
 
+import com.tracker.business.OfertaServiceImpl;
+import com.tracker.common.AppContext;
 import com.tracker.common.SceneNavegator;
+import com.tracker.data.entity.FiltroOferta;
+import com.tracker.data.entity.Oferta;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,6 +14,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -136,11 +141,24 @@ public class FiltroController implements Initializable {
     }
     public void onClickFiltrar(ActionEvent actionEvent) {
         String estadoSeleccionado = choiceboxEstado.getValue();
-        System.out.println("Estado elegido: " + estadoSeleccionado);
+        AppContext.getInstance().put("filtra", true);
+        OfertaServiceImpl ofertaService = (OfertaServiceImpl) AppContext.getInstance().get("ofertasevices");
+        if(estadoSeleccionado.equals("Cualquiera")) {
+
+        }
+
+
+
+
+
+     //   List<Oferta> filtrada = ofertaService.filtrar();
         SceneNavegator.navigateToInjection("main-view.fxml","Pagina Principal");
+      //  AppContext.getInstance().put("filtrado", AppContext.getInstance().get("ofertase"));
     }
 
     public void onClickCancelar(ActionEvent actionEvent) {
+        AppContext.getInstance().put("filtra", false);
+
         SceneNavegator.navigateToInjection("main-view.fxml","Pagina Principal");
     }
 }

@@ -32,21 +32,21 @@ public class OfertaJdbcRepository implements OfertaRepository {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
              
-            stmt.setInt(1, oferta.idEmpresa());
-            stmt.setString(2, oferta.titulo());
-            stmt.setString(3, oferta.descripcion());
-            stmt.setString(4, oferta.estado().name());
-            stmt.setDate(5, Date.valueOf(oferta.fechaPostulacion()));
-            stmt.setString(6, oferta.enlace());
-            stmt.setBigDecimal(7, oferta.salario());
-            stmt.setString(8, oferta.notas());
+            stmt.setInt(1, oferta.getId());
+            stmt.setString(2, oferta.getTitulo());
+            stmt.setString(3, oferta.getDescripcion());
+            stmt.setString(4, oferta.getEstado().toString());
+            stmt.setDate(5, Date.valueOf(oferta.getFechaPostulacion()));
+            stmt.setString(6, oferta.getEnlace());
+            stmt.setBigDecimal(7, oferta.getSalario());
+            stmt.setString(8, oferta.getNotas().toString());
              
             stmt.executeUpdate();
              
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    return new Oferta(rs.getInt(1), oferta.idEmpresa(), oferta.titulo(), oferta.descripcion(), 
-                                      oferta.estado(), oferta.fechaPostulacion(), oferta.enlace(), oferta.salario(), oferta.notas());
+                    return new Oferta(rs.getInt(1), oferta.getIdEmpresa(), oferta.getTitulo(), oferta.getDescripcion(),
+                                      oferta.getEstado(), oferta.getFechaPostulacion(), oferta.getEnlace(), oferta.getSalario(), oferta.getNotas());
                 }
             }
         } catch (SQLException e) {

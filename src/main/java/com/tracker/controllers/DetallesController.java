@@ -1,6 +1,12 @@
 package com.tracker.controllers;
 
+import com.tracker.business.EntrevistaServiceImpl;
+import com.tracker.business.OfertaService;
+import com.tracker.common.AppContext;
 import com.tracker.common.SceneNavegator;
+import com.tracker.data.entity.Entrevista;
+import com.tracker.data.entity.EntrevistaDetalle;
+import com.tracker.data.entity.Oferta;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -36,10 +42,10 @@ public class DetallesController implements Initializable {
     private Button btnVolver;
 
     @FXML
-    private ListView<?> listEntrevistas;
+    private ListView<EntrevistaDetalle> listEntrevistas;
 
     @FXML
-    private TextFlow textFlowDescripcion;
+    private Label txtDescripcion;
 
     @FXML
     private Label txtEmpresa;
@@ -73,7 +79,45 @@ public class DetallesController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+    if (AppContext.getInstance().get("selecionado") != null) {
+        Oferta oferta = (Oferta) AppContext.getInstance().get("selecionado");
+        txtEmpresa.setText(oferta.getIdEmpresa().toString());
+        txtFechaPostulacion.setText(oferta.getFechaPostulacion().toString());
+        txtID.setText(oferta.getId().toString());
+        txtNotas.setText((oferta.getNotas().toString()!=null)?oferta.getNotas().toString():"sin notas");
+        txtSalario.setText((oferta.getSalario()!=null)?oferta.getSalario().toString() : "No Definido" );
+        txtTitulo.setText(oferta.getTitulo());
+        txtDescripcion.setText((oferta.getDescripcion()!=null)?oferta.getDescripcion(): "Ninguna descripcion");
+        radEntrevista.setSelected(false);
+        radPendiennte.setSelected(false);
+        radRechazada.setSelected(false);
+        radAceptada.setSelected(false);
+        AppContext.getInstance().get("entrevistaService");
+        listEntrevistas.getItems().addAll(((EntrevistaServiceImpl)AppContext.getInstance().get("entrevistaService")).listarPorOferta(oferta.getId()));
+        switch (oferta.getEstado().toString()) {
+            case "ACEPTADA":
+                radAceptada.setSelected(true);
 
+                radEntrevista.setSelected(false);
+                radPendiennte.setSelected(false);
+                radRechazada.setSelected(false);
+
+                break;
+                case "PENDIENTE":
+                    radPendiennte.setSelected(true);
+                    break;
+                    case "ENTREVISTA":
+                        radEntrevista.setSelected(true);
+                        break;
+                        case "RECHAZADA":
+                            radRechazada.setSelected(true);
+                            break;
+
+        }
+
+
+
+    }
     }
 
     @FXML
@@ -114,11 +158,13 @@ public class DetallesController implements Initializable {
 
     @FXML
     void onClickEliminar(ActionEvent event) {
+
         SceneNavegator.navigateToInjection("main-view.fxml","Pagina Principal");
     }
 
     @FXML
     void onClickModificar(ActionEvent event) {
+
         SceneNavegator.navigateToInjection("main-view.fxml","Pagina Principal");
     }
 

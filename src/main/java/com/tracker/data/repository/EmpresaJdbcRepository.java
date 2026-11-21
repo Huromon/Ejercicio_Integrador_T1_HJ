@@ -33,16 +33,16 @@ public class EmpresaJdbcRepository implements EmpresaRepository {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
              
-            stmt.setString(1, empresa.nombre());
-            stmt.setString(2, empresa.sector());
-            stmt.setString(3, empresa.web());
-            stmt.setDate(4, Date.valueOf(empresa.fechaRegistro()));
+            stmt.setString(1, empresa.getNombre());
+            stmt.setString(2, empresa.getSector());
+            stmt.setString(3, empresa.getWeb());
+            stmt.setDate(4, Date.valueOf(empresa.getFechaRegistro()));
              
             stmt.executeUpdate();
              
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    return new Empresa(rs.getInt(1), empresa.nombre(), empresa.sector(), empresa.web(), empresa.fechaRegistro());
+                    return new Empresa(rs.getInt(1), empresa.getNombre(), empresa.getSector(), empresa.getWeb(), empresa.getFechaRegistro());
                 }
             }
         } catch (SQLException e) {
@@ -60,17 +60,17 @@ public class EmpresaJdbcRepository implements EmpresaRepository {
      */
     @Override
     public Empresa actualizar(Empresa empresa) {
-        if (empresa.id() == null) {
+        if (empresa.getId() == null) {
             throw new ValidacionException("No se puede actualizar una empresa sin ID.");
         }
         String sql = "UPDATE EMPRESA SET nombre = ?, sector = ?, web = ?, fechaRegistro = ? WHERE id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, empresa.nombre());
-            stmt.setString(2, empresa.sector());
-            stmt.setString(3, empresa.web());
-            stmt.setDate(4, Date.valueOf(empresa.fechaRegistro()));
-            stmt.setInt(5, empresa.id());
+            stmt.setString(1, empresa.getNombre());
+            stmt.setString(2, empresa.getSector());
+            stmt.setString(3, empresa.getWeb());
+            stmt.setDate(4, Date.valueOf(empresa.getFechaRegistro()));
+            stmt.setInt(5, empresa.getId());
             stmt.executeUpdate();
             return empresa;
         } catch (SQLException e) {

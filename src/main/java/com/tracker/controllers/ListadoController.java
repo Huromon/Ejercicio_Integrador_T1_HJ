@@ -1,46 +1,63 @@
 package com.tracker.controllers;
 
+import com.tracker.business.OfertaServiceImpl;
 import com.tracker.common.AppContext;
 import com.tracker.common.SceneNavegator;
+import com.tracker.data.entity.Oferta;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
  * Controlador de la vista principal con el listado de candidaturas.
  */
 public class ListadoController implements Initializable {
-    @javafx.fxml.FXML
+    @FXML
     private Button btnNueva;
-    @javafx.fxml.FXML
-    private TableColumn cTitulo;
-    @javafx.fxml.FXML
-    private TableColumn cEmpresa;
-    @javafx.fxml.FXML
-    private TableColumn cFechaPostulacion;
-    @javafx.fxml.FXML
+    @FXML
+    private TableColumn<Oferta,String> cId;
+    @FXML
+    private TableColumn<Oferta,String> cTitulo;
+    @FXML
+    private TableColumn<Oferta,String> cEmpresa;
+    @FXML
+    private TableColumn<Oferta,String> cEstado;
+    @FXML
+    private TableColumn<Oferta, String> cFechaPostulacion;
+    @FXML
+    private TableColumn<Oferta,String> cSalario;
+    @FXML
+    private TableView<Oferta> tCandidaturas;
+    @FXML
     private Button btnEliminar;
-    @javafx.fxml.FXML
+    @FXML
     private Button btnFiltrar;
-    @javafx.fxml.FXML
+    @FXML
     private Button btnQuitarFiltro;
-    @javafx.fxml.FXML
-    private TableColumn cEstado;
-    @javafx.fxml.FXML
-    private TableView tCandidaturas;
-    @javafx.fxml.FXML
-    private TableColumn cSalario;
-    @javafx.fxml.FXML
-    private TableColumn cId;
-    @javafx.fxml.FXML
-    private BorderPane fondo;
 
+    @FXML
+    private BorderPane fondo;
+    private OfertaServiceImpl oo;
+public ListadoController(){
+    Boolean filt =(Boolean) AppContext.getInstance().get("filtra");
+if(filt){
+    this.oo = (OfertaServiceImpl) AppContext.getInstance().get("filtrado");
+}else {
+    this.oo = (OfertaServiceImpl) AppContext.getInstance().get("ofertasevices");
+}
+
+}
     /**
      * Registra un listener que guarda en el contexto la candidatura seleccionada en la tabla.
      *
@@ -50,11 +67,75 @@ public class ListadoController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        tCandidaturas.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection)->{
-            AppContext.getInstance().put("oferta",newSelection);
+        List<Oferta> listaofert = oo.listarTodas();
+        btnEliminar.disableProperty().bind(tCandidaturas.getSelectionModel().selectedItemProperty().isNull());
 
+        configurarColumnas();
+
+        fondo.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            Node nodoPulsado = (Node) event.getTarget();
+            boolean clicDentroDeTabla = false;
+
+            while (nodoPulsado != null) {
+                if (nodoPulsado == tCandidaturas) {
+                    clicDentroDeTabla = true;
+                    break;
+                }
+                nodoPulsado = nodoPulsado.getParent();
+            }
+
+            if (!clicDentroDeTabla) {
+                AppContext.getInstance().put("selecionado", null);
+                tCandidaturas.getSelectionModel().clearSelection();
+            }
         });
+        cargarOfertasEnTabla(listaofert);
+        tCandidaturas.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                Oferta seleccionada = tCandidaturas.getSelectionModel().getSelectedItem();
+                if (seleccionada != null) {
+                    AppContext.getInstance().put("selecionado", seleccionada);
+                    // Ejemplo: navegar a la vista de detalle/edición
+                    SceneNavegator.navigateToInjection("Candidatura-view.fxml", "Detalle de Oferta");
+                }
+            }
+        });
+
+
     }
+    private void configurarColumnas() {
+        cId.setCellValueFactory(cell -> new SimpleStringProperty(
+                cell.getValue().getId() != null ? String.valueOf(cell.getValue().getId()) : ""
+        ));
+
+        cTitulo.setCellValueFactory(cell -> new SimpleStringProperty(
+                cell.getValue().getTitulo() != null ? cell.getValue().getTitulo() : ""
+        ));
+
+        cEmpresa.setCellValueFactory(cell -> new SimpleStringProperty(
+                cell.getValue().getIdEmpresa() != null ? String.valueOf(cell.getValue().getIdEmpresa()) : ""
+        ));
+
+        cEstado.setCellValueFactory(cell -> new SimpleStringProperty(
+                cell.getValue().getEstado() != null ? cell.getValue().getEstado().name() : ""
+        ));
+
+        cFechaPostulacion.setCellValueFactory(cell -> new SimpleStringProperty(
+                cell.getValue().getFechaPostulacion() != null ? cell.getValue().getFechaPostulacion().toString() : ""
+        ));
+
+        cSalario.setCellValueFactory(cell -> new SimpleStringProperty(
+                cell.getValue().getSalario() != null ? cell.getValue().getSalario().toPlainString() : ""
+        ));
+    }
+
+    public void cargarOfertasEnTabla(List<Oferta> ofertas) {
+        tCandidaturas.getItems().setAll(ofertas);
+    }
+
+
+
+
 
     /**
      * Elimina la candidatura seleccionada en la tabla.
@@ -63,6 +144,9 @@ public class ListadoController implements Initializable {
      */
     @javafx.fxml.FXML
     public void onClickEliminar(ActionEvent actionEvent) {
+        oo.eliminarConDependencias(((Oferta) AppContext.getInstance().get("selecionado")).getId());
+
+        AppContext.getInstance().put("selecionado", null);
     }
 
     /**
@@ -94,4 +178,5 @@ public class ListadoController implements Initializable {
     public void onClickNueva(ActionEvent actionEvent) {
         SceneNavegator.navigateToInjection("nuevo-view.fxml","Añadir");
     }
+
 }
