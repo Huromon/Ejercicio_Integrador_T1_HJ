@@ -1,5 +1,6 @@
 package com.tracker.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 
 import java.net.URL;
@@ -19,5 +20,13 @@ public class AñadirController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+    }
+
+    public void onClickAñadir(ActionEvent actionEvent) {
+        
+    }
+
+    public void onClickCancelar(ActionEvent actionEvent) {
+        
     }
 }
