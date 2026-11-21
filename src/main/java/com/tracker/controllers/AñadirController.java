@@ -1,7 +1,9 @@
 package com.tracker.controllers;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -10,6 +12,35 @@ import java.util.ResourceBundle;
  * Controlador de la vista para añadir una nueva candidatura.
  */
 public class AñadirController implements Initializable {
+    @FXML
+    private Button btnAñadir;
+
+    @FXML
+    private Button btnCancelar;
+
+    @FXML
+    private ChoiceBox<?> choiceboxEstado;
+
+    @FXML
+    private DatePicker dateFechaPostulacion;
+
+    @FXML
+    private TextArea inpDesc;
+
+    @FXML
+    private TextField inpEmpresa;
+
+    @FXML
+    private TextField inpEnlace;
+
+    @FXML
+    private TextField inpNotas;
+
+    @FXML
+    private TextField inpSalario;
+
+    @FXML
+    private TextField inpTitulo;
 
     /**
      * Inicializa los componentes de la vista una vez cargada.
@@ -21,6 +52,8 @@ public class AñadirController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
     }
+
+
 
     public void onClickAñadir(ActionEvent actionEvent) {
         
