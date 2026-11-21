@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.text.TextFlow;
 
 import java.net.URL;
@@ -43,7 +44,16 @@ public class DetallesController implements Initializable {
     private Label txtEmpresa;
 
     @FXML
-    private Label txtEstado;
+    private RadioButton radAceptada;
+
+    @FXML
+    private RadioButton radEntrevista;
+
+    @FXML
+    private RadioButton radPendiennte;
+
+    @FXML
+    private RadioButton radRechazada;
 
     @FXML
     private Label txtFechaPostulacion;
@@ -65,19 +75,54 @@ public class DetallesController implements Initializable {
 
     }
 
+    @FXML
+    void onAceptada(ActionEvent event) {
+        radAceptada.setSelected(true);
+        radPendiennte.setSelected(false);
+        radRechazada.setSelected(false);
+        radEntrevista.setSelected(false);
+    }
+
+
+
+    @FXML
+    void onEntrevista(ActionEvent event) {
+        radAceptada.setSelected(false);
+        radPendiennte.setSelected(false);
+        radRechazada.setSelected(false);
+        radEntrevista.setSelected(true);
+    }
+
+    @FXML
+    void onPendiente(ActionEvent event) {
+        radAceptada.setSelected(false);
+        radPendiennte.setSelected(true);
+        radRechazada.setSelected(false);
+        radEntrevista.setSelected(false);
+    }
+
+    @FXML
+    void onRechazada(ActionEvent event) {
+        radAceptada.setSelected(false);
+        radPendiennte.setSelected(false);
+        radRechazada.setSelected(true);
+        radEntrevista.setSelected(false);
+    }
+
+
 
     @FXML
     void onClickEliminar(ActionEvent event) {
-
+        SceneNavegator.navigateToInjection("main-view.fxml","Pagina Principal");
     }
 
     @FXML
     void onClickModificar(ActionEvent event) {
-
+        SceneNavegator.navigateToInjection("main-view.fxml","Pagina Principal");
     }
 
     @FXML
     void onClickVolver(ActionEvent event) {
-
+        SceneNavegator.navigateToInjection("main-view.fxml","Pagina Principal");
     }
 }

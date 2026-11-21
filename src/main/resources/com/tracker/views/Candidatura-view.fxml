@@ -4,59 +4,62 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-
 <BorderPane xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tracker.controllers.DetallesController">
    <center>
       <VBox alignment="CENTER" fillWidth="false" spacing="6.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" spacing="10.0">
                <children>
                   <Label text="ID:" />
                   <Label fx:id="txtID" text="Label" />
                </children>
             </HBox>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" spacing="10.0">
                <children>
                   <Label text="Titulo:" />
                   <Label fx:id="txtTitulo" text="Label" />
                </children>
             </HBox>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" spacing="10.0">
                <children>
                   <Label text="Empresa:" />
                   <Label fx:id="txtEmpresa" text="Label" />
                </children>
             </HBox>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" spacing="10.0">
                <children>
                   <Label text="Estado:" />
-                  <Label fx:id="txtEstado" text="Label" />
+                  <RadioButton fx:id="radPendiennte" mnemonicParsing="false" onAction="#onPendiente" text="Pendiente" />
+                  <RadioButton fx:id="radEntrevista" mnemonicParsing="false" onAction="#onEntrevista" text="Entrevista" />
+                  <RadioButton fx:id="radAceptada" mnemonicParsing="false" onAction="#onAceptada" text="Aceptada" />
+                  <RadioButton fx:id="radRechazada" mnemonicParsing="false" onAction="#onRechazada" text="Rechazada" />
                </children>
             </HBox>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" spacing="10.0">
                <children>
                   <Label text="Fecha de postulacion:" />
                   <Label fx:id="txtFechaPostulacion" text="Label" />
                </children>
             </HBox>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" spacing="10.0">
                <children>
                   <Label text="Salario:" />
                   <Label fx:id="txtSalario" text="Label" />
                </children>
             </HBox>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" spacing="10.0">
                <children>
                   <Label text="Nota:" />
                   <Label fx:id="txtNotas" text="Label" />
                </children>
             </HBox>
-            <HBox alignment="TOP_CENTER">
+            <HBox alignment="TOP_CENTER" spacing="5.0">
                <children>
                   <Label text="Descripcion:" />
                   <TextFlow fx:id="textFlowDescripcion" prefHeight="75.0" prefWidth="390.0" />

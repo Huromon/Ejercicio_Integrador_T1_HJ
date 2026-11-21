@@ -56,10 +56,10 @@ public class AñadirController implements Initializable {
 
 
     public void onClickAñadir(ActionEvent actionEvent) {
-        
+        SceneNavegator.navigateToInjection("main-View.fxml","Pagina Principal");
     }
 
     public void onClickCancelar(ActionEvent actionEvent) {
-        
+        SceneNavegator.navigateToInjection("main-view.fxml","Pagina Principal");
     }
 }
