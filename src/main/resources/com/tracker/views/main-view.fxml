@@ -8,7 +8,7 @@
 
 <BorderPane fx:id="fondo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="664.0" prefWidth="932.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tracker.controllers.ListadoController">
    <center>
-      <TableView fx:id="tCandidaturas" editable="true"  prefHeight="482.0" prefWidth="947.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tCandidaturas" editable="true" prefHeight="482.0" prefWidth="947.0" BorderPane.alignment="CENTER">
         <columns>
             <TableColumn fx:id="cId" prefWidth="38.0" text="Id" />
             <TableColumn fx:id="cEmpresa" prefWidth="145.0" text="Empresa" />
@@ -26,7 +26,6 @@
       <HBox alignment="CENTER" BorderPane.alignment="TOP_RIGHT">
          <children>
             <Button fx:id="btnNueva" mnemonicParsing="false" onAction="#onClickNueva" text="Añadir" />
-            <Button fx:id="btnEliminar" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#onClickEliminar" text="Eliminar" />
          </children>
       </HBox>
    </bottom>

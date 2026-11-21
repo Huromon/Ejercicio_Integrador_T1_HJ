@@ -76,6 +76,11 @@ public class DetallesController implements Initializable {
     @FXML
     private Label txtTitulo;
 
+    private OfertaServiceImpl oo;
+    public DetallesController(){
+        oo = (OfertaServiceImpl) AppContext.getInstance().get("ofertasevices");
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     if (AppContext.getInstance().get("selecionado") != null) {
@@ -158,40 +163,42 @@ public class DetallesController implements Initializable {
     @FXML
     void onClickEliminar(ActionEvent event) {
 
+      oo.eliminarConDependencias(((Oferta) AppContext.getInstance().get("selecionado")).getId());
+        AppContext.getInstance().put("selecionado", null);
         SceneNavegator.navigateToInjection("main-view.fxml","Pagina Principal");
     }
 
     @FXML
     void onClickModificar(ActionEvent event) {
-        OfertaServiceImpl ofertaService = (OfertaServiceImpl) AppContext.getInstance().get("ofertasevices");
-        if(ofertaService != null) {
+
+        if(oo != null) {
         String estado =((Oferta) AppContext.getInstance().get("selecionado")).getEstado().toString();
         if(radPendiennte.isSelected()) {
             if((estado.equalsIgnoreCase("PENDIENTE"))){
                 ningunCambio();
             }else{
-                ofertaService.cambiarEstado(((Oferta) AppContext.getInstance().get("selecionado") ).getId(),Estado.PENDIENTE);
+                oo.cambiarEstado(((Oferta) AppContext.getInstance().get("selecionado") ).getId(),Estado.PENDIENTE);
                 confirmarModificacion();
             }
         }else if(radEntrevista.isSelected()) {
             if((estado.equalsIgnoreCase("ENTREVISTA"))) {
                 ningunCambio();
             }else{
-                ofertaService.cambiarEstado(((Oferta) AppContext.getInstance().get("selecionado") ).getId(),Estado.ENTREVISTA);
+                oo.cambiarEstado(((Oferta) AppContext.getInstance().get("selecionado") ).getId(),Estado.ENTREVISTA);
                 confirmarModificacion();
             }
         }else if(radAceptada.isSelected()) {
             if((estado.equalsIgnoreCase("ACEPTADA")) ) {
                 ningunCambio();
             }else{
-                ofertaService.cambiarEstado(((Oferta) AppContext.getInstance().get("selecionado") ).getId(),Estado.ACEPTADA);
+                oo.cambiarEstado(((Oferta) AppContext.getInstance().get("selecionado") ).getId(),Estado.ACEPTADA);
                 confirmarModificacion();
             }
         }else if(radRechazada.isSelected()) {
             if ((estado.equalsIgnoreCase("RECHAZADA"))) {
                 ningunCambio();
             } else {
-                ofertaService.cambiarEstado(((Oferta) AppContext.getInstance().get("selecionado")).getId(), Estado.RECHAZADA);
+                oo.cambiarEstado(((Oferta) AppContext.getInstance().get("selecionado")).getId(), Estado.RECHAZADA);
                 confirmarModificacion();
             }
         }

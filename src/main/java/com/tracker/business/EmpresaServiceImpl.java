@@ -1,5 +1,6 @@
 package com.tracker.business;
 
+import com.tracker.common.AppContext;
 import com.tracker.data.entity.Empresa;
 import com.tracker.data.repository.EmpresaRepository;
 import com.tracker.exception.NoEncontradoException;
@@ -21,11 +22,20 @@ public class EmpresaServiceImpl implements EmpresaService {
      *
      * @param empresaRepository repositorio de empresas.
      */
+
     public EmpresaServiceImpl(EmpresaRepository empresaRepository) {
 
         this.empresaRepository = empresaRepository;
+        AppContext.getInstance().put("empresaService", this);
     }
 
+    @Override
+    public Optional<Empresa> buscarPorNombre(String nombre) {
+        if (nombre == null || nombre.isBlank()) {
+            throw new ValidacionException("El nombre de la empresa no puede ser nulo o vacío.");
+        }
+        return empresaRepository.buscarPorNombre(nombre.trim());
+    }
     /**
      * Valida los datos y crea una nueva empresa con la fecha de registro actual.
      *

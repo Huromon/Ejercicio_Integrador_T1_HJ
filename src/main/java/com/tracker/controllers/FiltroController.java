@@ -150,7 +150,6 @@ public class FiltroController implements Initializable {
 
 
 
-
      //   List<Oferta> filtrada = ofertaService.filtrar();
         SceneNavegator.navigateToInjection("main-view.fxml","Pagina Principal");
       //  AppContext.getInstance().put("filtrado", AppContext.getInstance().get("ofertase"));

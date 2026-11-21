@@ -1,5 +1,7 @@
 package com.tracker.data.repository;
 
+import com.tracker.business.EmpresaServiceImpl;
+import com.tracker.common.AppContext;
 import com.tracker.data.config.DataSourceFactory;
 import com.tracker.data.entity.*;
 import com.tracker.exception.AccesoDatosException;
@@ -28,25 +30,29 @@ public class OfertaJdbcRepository implements OfertaRepository {
      */
     @Override
     public Oferta guardar(Oferta oferta) {
+
         String sql = "INSERT INTO OFERTA (id_empresa, titulo, descripcion, estado, fechaPostulacion, enlace, salario, notas) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-             
-            stmt.setInt(1, oferta.getId());
+
+
+            stmt.setObject(1, oferta.getIdEmpresa(), java.sql.Types.INTEGER);
             stmt.setString(2, oferta.getTitulo());
             stmt.setString(3, oferta.getDescripcion());
-            stmt.setString(4, oferta.getEstado().toString());
-            stmt.setDate(5, Date.valueOf(oferta.getFechaPostulacion()));
+            stmt.setString(4, oferta.getEstado() != null ? oferta.getEstado().name() : null);
+            stmt.setDate(5, oferta.getFechaPostulacion() != null ? Date.valueOf(oferta.getFechaPostulacion()) : null);
             stmt.setString(6, oferta.getEnlace());
             stmt.setBigDecimal(7, oferta.getSalario());
-            stmt.setString(8, oferta.getNotas().toString());
-             
+
+            stmt.setString(8, oferta.getNotas());
+
             stmt.executeUpdate();
-             
+
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
                     return new Oferta(rs.getInt(1), oferta.getIdEmpresa(), oferta.getTitulo(), oferta.getDescripcion(),
-                                      oferta.getEstado(), oferta.getFechaPostulacion(), oferta.getEnlace(), oferta.getSalario(), oferta.getNotas());
+                            oferta.getEstado(), oferta.getFechaPostulacion(), oferta.getEnlace(), oferta.getSalario(), oferta.getNotas());
                 }
             }
         } catch (SQLException e) {

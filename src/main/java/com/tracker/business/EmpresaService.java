@@ -8,6 +8,7 @@ import java.util.Optional;
  * Servicios de negocio para la gestión de empresas.
  */
 public interface EmpresaService {
+    Optional<Empresa> buscarPorNombre(String nombre);
 
     /**
      * Crea una nueva empresa.

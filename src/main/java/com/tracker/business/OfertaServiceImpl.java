@@ -5,6 +5,7 @@ import com.tracker.data.TransaccionManager;
 import com.tracker.data.entity.*;
 import com.tracker.data.repository.EmpresaRepository;
 import com.tracker.data.repository.EntrevistaRepository;
+import com.tracker.data.repository.OfertaJdbcRepository;
 import com.tracker.data.repository.OfertaRepository;
 import com.tracker.exception.NoEncontradoException;
 import com.tracker.exception.ValidacionException;
@@ -93,7 +94,9 @@ public class OfertaServiceImpl implements OfertaService {
     public List<Oferta> listarTodas() {
         return ofertaRepository.buscarTodos();
     }
-
+    public OfertaRepository getOfertaRepository() {
+        return this.ofertaRepository;
+    }
     /**
      * Busca una oferta por su identificador.
      *

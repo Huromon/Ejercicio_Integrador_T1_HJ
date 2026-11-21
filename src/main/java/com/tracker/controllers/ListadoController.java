@@ -1,5 +1,6 @@
 package com.tracker.controllers;
 
+import com.tracker.business.EmpresaServiceImpl;
 import com.tracker.business.OfertaServiceImpl;
 import com.tracker.common.AppContext;
 import com.tracker.common.SceneNavegator;
@@ -39,9 +40,7 @@ public class ListadoController implements Initializable {
     private TableColumn<Oferta,String> cSalario;
     @FXML
     private TableView<Oferta> tCandidaturas;
-    @FXML
-    private Button btnEliminar;
-    @FXML
+
     private Button btnFiltrar;
     @FXML
     private Button btnQuitarFiltro;
@@ -49,6 +48,7 @@ public class ListadoController implements Initializable {
     @FXML
     private BorderPane fondo;
     private OfertaServiceImpl oo;
+    private EmpresaServiceImpl oo2;
 public ListadoController(){
     Boolean filt =(Boolean) AppContext.getInstance().get("filtra");
 if(filt){
@@ -56,6 +56,7 @@ if(filt){
 }else {
     this.oo = (OfertaServiceImpl) AppContext.getInstance().get("ofertasevices");
 }
+oo2 = (EmpresaServiceImpl) AppContext.getInstance().get("empresaService");
 
 }
     /**
@@ -68,7 +69,7 @@ if(filt){
     public void initialize(URL location, ResourceBundle resources) {
 
         List<Oferta> listaofert = oo.listarTodas();
-        btnEliminar.disableProperty().bind(tCandidaturas.getSelectionModel().selectedItemProperty().isNull());
+
 
         configurarColumnas();
 
@@ -95,7 +96,7 @@ if(filt){
                 Oferta seleccionada = tCandidaturas.getSelectionModel().getSelectedItem();
                 if (seleccionada != null) {
                     AppContext.getInstance().put("selecionado", seleccionada);
-                    // Ejemplo: navegar a la vista de detalle/edición
+
                     SceneNavegator.navigateToInjection("Candidatura-view.fxml", "Detalle de Oferta");
                 }
             }
@@ -137,17 +138,6 @@ if(filt){
 
 
 
-    /**
-     * Elimina la candidatura seleccionada en la tabla.
-     *
-     * @param actionEvent evento producido al pulsar el botón.
-     */
-    @javafx.fxml.FXML
-    public void onClickEliminar(ActionEvent actionEvent) {
-        oo.eliminarConDependencias(((Oferta) AppContext.getInstance().get("selecionado")).getId());
-
-        AppContext.getInstance().put("selecionado", null);
-    }
 
     /**
      * Abre la vista de filtrado de candidaturas.
