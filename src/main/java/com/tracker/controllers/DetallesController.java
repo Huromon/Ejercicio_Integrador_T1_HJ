@@ -2,18 +2,17 @@ package com.tracker.controllers;
 
 import com.tracker.business.EntrevistaServiceImpl;
 import com.tracker.business.OfertaService;
+import com.tracker.business.OfertaServiceImpl;
 import com.tracker.common.AppContext;
 import com.tracker.common.SceneNavegator;
 import com.tracker.data.entity.Entrevista;
 import com.tracker.data.entity.EntrevistaDetalle;
+import com.tracker.data.entity.Estado;
 import com.tracker.data.entity.Oferta;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.*;
 import javafx.scene.text.TextFlow;
 
 import java.net.URL;
@@ -84,7 +83,7 @@ public class DetallesController implements Initializable {
         txtEmpresa.setText(oferta.getIdEmpresa().toString());
         txtFechaPostulacion.setText(oferta.getFechaPostulacion().toString());
         txtID.setText(oferta.getId().toString());
-        txtNotas.setText((oferta.getNotas().toString()!=null)?oferta.getNotas().toString():"sin notas");
+        txtNotas.setText((oferta.getNotas()!=null)?oferta.getNotas().toString():"sin notas");
         txtSalario.setText((oferta.getSalario()!=null)?oferta.getSalario().toString() : "No Definido" );
         txtTitulo.setText(oferta.getTitulo());
         txtDescripcion.setText((oferta.getDescripcion()!=null)?oferta.getDescripcion(): "Ninguna descripcion");
@@ -164,8 +163,57 @@ public class DetallesController implements Initializable {
 
     @FXML
     void onClickModificar(ActionEvent event) {
+        OfertaServiceImpl ofertaService = (OfertaServiceImpl) AppContext.getInstance().get("ofertasevices");
+        if(ofertaService != null) {
+        String estado =((Oferta) AppContext.getInstance().get("selecionado")).getEstado().toString();
+        if(radPendiennte.isSelected()) {
+            if((estado.equalsIgnoreCase("PENDIENTE"))){
+                ningunCambio();
+            }else{
+                ofertaService.cambiarEstado(((Oferta) AppContext.getInstance().get("selecionado") ).getId(),Estado.PENDIENTE);
+                confirmarModificacion();
+            }
+        }else if(radEntrevista.isSelected()) {
+            if((estado.equalsIgnoreCase("ENTREVISTA"))) {
+                ningunCambio();
+            }else{
+                ofertaService.cambiarEstado(((Oferta) AppContext.getInstance().get("selecionado") ).getId(),Estado.ENTREVISTA);
+                confirmarModificacion();
+            }
+        }else if(radAceptada.isSelected()) {
+            if((estado.equalsIgnoreCase("ACEPTADA")) ) {
+                ningunCambio();
+            }else{
+                ofertaService.cambiarEstado(((Oferta) AppContext.getInstance().get("selecionado") ).getId(),Estado.ACEPTADA);
+                confirmarModificacion();
+            }
+        }else if(radRechazada.isSelected()) {
+            if ((estado.equalsIgnoreCase("RECHAZADA"))) {
+                ningunCambio();
+            } else {
+                ofertaService.cambiarEstado(((Oferta) AppContext.getInstance().get("selecionado")).getId(), Estado.RECHAZADA);
+                confirmarModificacion();
+            }
+        }
+        }
 
-        SceneNavegator.navigateToInjection("main-view.fxml","Pagina Principal");
+
+    }
+
+    private static void ningunCambio() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Alert");
+        alert.setHeaderText("Alert");
+        alert.setContentText("No se ha realizado ningun cambio");
+        alert.showAndWait();
+    }
+
+    private static void confirmarModificacion() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("aviso");
+        alert.setHeaderText(null);
+        alert.setContentText("se a modificar el estado");
+        alert.showAndWait();
     }
 
     @FXML
