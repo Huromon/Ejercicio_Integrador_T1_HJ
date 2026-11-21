@@ -1,14 +1,12 @@
 package com.tracker.controllers;
 
+import com.tracker.business.EmpresaServiceImpl;
 import com.tracker.business.EntrevistaServiceImpl;
 import com.tracker.business.OfertaService;
 import com.tracker.business.OfertaServiceImpl;
 import com.tracker.common.AppContext;
 import com.tracker.common.SceneNavegator;
-import com.tracker.data.entity.Entrevista;
-import com.tracker.data.entity.EntrevistaDetalle;
-import com.tracker.data.entity.Estado;
-import com.tracker.data.entity.Oferta;
+import com.tracker.data.entity.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.text.TextFlow;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -77,15 +76,23 @@ public class DetallesController implements Initializable {
     private Label txtTitulo;
 
     private OfertaServiceImpl oo;
+    private EmpresaServiceImpl oo2;
+
     public DetallesController(){
         oo = (OfertaServiceImpl) AppContext.getInstance().get("ofertasevices");
+        oo2 = (EmpresaServiceImpl) AppContext.getInstance().get("empresaSevices");
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     if (AppContext.getInstance().get("selecionado") != null) {
+
         Oferta oferta = (Oferta) AppContext.getInstance().get("selecionado");
-        txtEmpresa.setText(oferta.getIdEmpresa().toString());
+       EmpresaServiceImpl l =(EmpresaServiceImpl) AppContext.getInstance().get("empresaService");
+
+
+
+        txtEmpresa.setText((l.buscarPorId(oferta.getIdEmpresa())).get().getNombre());
         txtFechaPostulacion.setText(oferta.getFechaPostulacion().toString());
         txtID.setText(oferta.getId().toString());
         txtNotas.setText((oferta.getNotas()!=null)?oferta.getNotas().toString():"sin notas");

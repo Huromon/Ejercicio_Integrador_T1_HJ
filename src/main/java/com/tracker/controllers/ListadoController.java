@@ -4,6 +4,7 @@ import com.tracker.business.EmpresaServiceImpl;
 import com.tracker.business.OfertaServiceImpl;
 import com.tracker.common.AppContext;
 import com.tracker.common.SceneNavegator;
+import com.tracker.data.entity.Empresa;
 import com.tracker.data.entity.Oferta;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -18,6 +19,7 @@ import javafx.scene.layout.BorderPane;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -110,11 +112,12 @@ oo2 = (EmpresaServiceImpl) AppContext.getInstance().get("empresaService");
         ));
 
         cTitulo.setCellValueFactory(cell -> new SimpleStringProperty(
+
                 cell.getValue().getTitulo() != null ? cell.getValue().getTitulo() : ""
         ));
 
         cEmpresa.setCellValueFactory(cell -> new SimpleStringProperty(
-                cell.getValue().getIdEmpresa() != null ? String.valueOf(cell.getValue().getIdEmpresa()) : ""
+                cell.getValue().getIdEmpresa() != null ? String.valueOf(( (Empresa) (oo2.buscarPorId(cell.getValue().getIdEmpresa())).get()).getNombre()) : ""
         ));
 
         cEstado.setCellValueFactory(cell -> new SimpleStringProperty(
