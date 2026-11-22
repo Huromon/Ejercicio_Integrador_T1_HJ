@@ -9,7 +9,6 @@ module EjercicioIntegrador {
     requires javafx.graphics;
     requires javafx.controls;
     requires mysql.connector.j;
-    requires jdk.jfr;
     requires static lombok;
     requires jakarta.persistence;
     requires org.hibernate.orm.core;

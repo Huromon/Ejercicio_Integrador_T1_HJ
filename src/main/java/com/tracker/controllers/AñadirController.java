@@ -11,7 +11,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 
 import java.math.BigDecimal;
 import java.net.URL;
