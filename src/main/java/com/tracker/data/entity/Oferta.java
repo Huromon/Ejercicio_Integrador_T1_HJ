@@ -9,8 +9,10 @@ import java.time.LocalDate;
 /**
  * Oferta de empleo a la que se ha presentado una candidatura.
  * <p>
- * Guarda el identificador de la empresa como campo simple, sin relación JPA,
- * y mantiene el estado como cadena en la base de datos.
+ * Sus campos son {@code id} (identificador generado), {@code idEmpresa}
+ * (identificador de la empresa como campo simple, sin relación JPA),
+ * {@code titulo}, {@code descripcion}, {@code estado} (guardado como cadena),
+ * {@code fechaPostulacion}, {@code enlace}, {@code salario} y {@code notas}.
  * </p>
  */
 @Entity

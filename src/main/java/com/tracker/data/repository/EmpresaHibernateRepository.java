@@ -10,9 +10,8 @@ import java.util.Optional;
 /**
  * Repositorio Hibernate de empresas.
  * <p>
- * Implementa el mismo contrato que el repositorio JDBC mientras la aplicación
- * termina de migrarse, de modo que pueda sustituirse en la Parte 4 sin tocar
- * los servicios de negocio.
+ * Implementa {@link EmpresaRepository} con HQL y sesiones Hibernate, sin
+ * dependencias de JDBC ni de los antiguos repositorios.
  * </p>
  */
 public class EmpresaHibernateRepository implements EmpresaRepository {

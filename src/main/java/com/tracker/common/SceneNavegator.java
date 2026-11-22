@@ -25,9 +25,8 @@ public class SceneNavegator {
      *
      * @param fxml  nombre del archivo FXML a cargar.
      * @param title título a mostrar en la ventana.
-     * @throws IOException si no se puede cargar la vista.
      */
-    public static void navigateTo(String fxml, String title) throws IOException {
+    public static void navigateTo(String fxml, String title) {
         FXMLLoader fxmlLoader = new FXMLLoader(Aplicacion.class.getResource("/com/tracker/views/" + fxml));
         try {
             Scene scene = new Scene(fxmlLoader.load());

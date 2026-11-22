@@ -10,8 +10,12 @@ import javafx.stage.Stage;
 
 /**
  * Punto de entrada JavaFX de la aplicación de seguimiento de candidaturas.
+ * <p>
+ * Inicializa Hibernate a través de {@link TrackerServiceFactory} al arrancar y
+ * cierra el {@code SessionFactory} en {@link #stop()}.
+ * </p>
  */
-public class Aplicacion extends Application{
+public class Aplicacion extends Application {
 
     /**
      * Configura la ventana principal y muestra la vista inicial del listado.

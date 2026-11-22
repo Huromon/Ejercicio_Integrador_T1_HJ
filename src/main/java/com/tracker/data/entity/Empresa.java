@@ -7,6 +7,11 @@ import java.time.LocalDate;
 
 /**
  * Empresa a la que pertenece una candidatura.
+ * <p>
+ * Sus campos son {@code id} (identificador generado), {@code nombre}
+ * (obligatorio y único), {@code sector}, {@code web} y
+ * {@code fechaRegistro}.
+ * </p>
  */
 @Entity
 @Table(name = "EMPRESA")
