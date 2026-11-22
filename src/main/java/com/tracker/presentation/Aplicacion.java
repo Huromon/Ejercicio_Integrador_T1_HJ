@@ -2,6 +2,7 @@ package com.tracker.presentation;
 
 import com.tracker.business.TrackerServiceFactory;
 import com.tracker.common.AppContext;
+import com.tracker.common.ContextKeys;
 import com.tracker.common.SceneNavegator;
 import com.tracker.data.config.HibernateConfig;
 import javafx.application.Application;
@@ -22,7 +23,7 @@ public class Aplicacion extends Application{
     public void start(Stage stage) throws Exception {
 
         TrackerServiceFactory.inicializar();
-        AppContext.getInstance().put("filtra",false);
+        AppContext.getInstance().put(ContextKeys.FILTRA, false);
         SceneNavegator.setStage(stage);
         SceneNavegator.navigateTo("main-view.fxml","Pagina Principal");
         stage.show();

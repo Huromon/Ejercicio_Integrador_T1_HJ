@@ -5,6 +5,7 @@ import com.tracker.business.EntrevistaServiceImpl;
 import com.tracker.business.OfertaService;
 import com.tracker.business.OfertaServiceImpl;
 import com.tracker.common.AppContext;
+import com.tracker.common.ContextKeys;
 import com.tracker.common.SceneNavegator;
 import com.tracker.data.entity.*;
 import javafx.event.ActionEvent;
@@ -79,16 +80,16 @@ public class DetallesController implements Initializable {
     private EmpresaServiceImpl oo2;
 
     public DetallesController(){
-        oo = (OfertaServiceImpl) AppContext.getInstance().get("ofertasevices");
-        oo2 = (EmpresaServiceImpl) AppContext.getInstance().get("empresaSevices");
+        oo = (OfertaServiceImpl) AppContext.getInstance().get(ContextKeys.OFERTA_SERVICE);
+        oo2 = (EmpresaServiceImpl) AppContext.getInstance().get(ContextKeys.EMPRESA_SERVICE);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-    if (AppContext.getInstance().get("selecionado") != null) {
+    if (AppContext.getInstance().get(ContextKeys.SELECCIONADO) != null) {
 
-        Oferta oferta = (Oferta) AppContext.getInstance().get("selecionado");
-       EmpresaServiceImpl l =(EmpresaServiceImpl) AppContext.getInstance().get("empresaService");
+        Oferta oferta = (Oferta) AppContext.getInstance().get(ContextKeys.SELECCIONADO);
+       EmpresaServiceImpl l = (EmpresaServiceImpl) AppContext.getInstance().get(ContextKeys.EMPRESA_SERVICE);
 
 
 
@@ -103,8 +104,7 @@ public class DetallesController implements Initializable {
         radPendiennte.setSelected(false);
         radRechazada.setSelected(false);
         radAceptada.setSelected(false);
-        AppContext.getInstance().get("entrevistaService");
-        listEntrevistas.getItems().addAll(((EntrevistaServiceImpl)AppContext.getInstance().get("entrevistaService")).listarPorOferta(oferta.getId()));
+        listEntrevistas.getItems().addAll(((EntrevistaServiceImpl) AppContext.getInstance().get(ContextKeys.ENTREVISTA_SERVICE)).listarPorOferta(oferta.getId()));
         switch (oferta.getEstado().toString()) {
             case "ACEPTADA":
                 radAceptada.setSelected(true);
@@ -170,8 +170,8 @@ public class DetallesController implements Initializable {
     @FXML
     void onClickEliminar(ActionEvent event) {
 
-      oo.eliminarConDependencias(((Oferta) AppContext.getInstance().get("selecionado")).getId());
-        AppContext.getInstance().put("selecionado", null);
+      oo.eliminarConDependencias(((Oferta) AppContext.getInstance().get(ContextKeys.SELECCIONADO)).getId());
+        AppContext.getInstance().put(ContextKeys.SELECCIONADO, null);
         SceneNavegator.navigateToInjection("main-view.fxml","Pagina Principal");
     }
 
@@ -179,33 +179,33 @@ public class DetallesController implements Initializable {
     void onClickModificar(ActionEvent event) {
 
         if(oo != null) {
-        String estado =((Oferta) AppContext.getInstance().get("selecionado")).getEstado().toString();
+        String estado =((Oferta) AppContext.getInstance().get(ContextKeys.SELECCIONADO)).getEstado().toString();
         if(radPendiennte.isSelected()) {
             if((estado.equalsIgnoreCase("PENDIENTE"))){
                 ningunCambio();
             }else{
-                oo.cambiarEstado(((Oferta) AppContext.getInstance().get("selecionado") ).getId(),Estado.PENDIENTE);
+                oo.cambiarEstado(((Oferta) AppContext.getInstance().get(ContextKeys.SELECCIONADO) ).getId(),Estado.PENDIENTE);
                 confirmarModificacion();
             }
         }else if(radEntrevista.isSelected()) {
             if((estado.equalsIgnoreCase("ENTREVISTA"))) {
                 ningunCambio();
             }else{
-                oo.cambiarEstado(((Oferta) AppContext.getInstance().get("selecionado") ).getId(),Estado.ENTREVISTA);
+                oo.cambiarEstado(((Oferta) AppContext.getInstance().get(ContextKeys.SELECCIONADO) ).getId(),Estado.ENTREVISTA);
                 confirmarModificacion();
             }
         }else if(radAceptada.isSelected()) {
             if((estado.equalsIgnoreCase("ACEPTADA")) ) {
                 ningunCambio();
             }else{
-                oo.cambiarEstado(((Oferta) AppContext.getInstance().get("selecionado") ).getId(),Estado.ACEPTADA);
+                oo.cambiarEstado(((Oferta) AppContext.getInstance().get(ContextKeys.SELECCIONADO) ).getId(),Estado.ACEPTADA);
                 confirmarModificacion();
             }
         }else if(radRechazada.isSelected()) {
             if ((estado.equalsIgnoreCase("RECHAZADA"))) {
                 ningunCambio();
             } else {
-                oo.cambiarEstado(((Oferta) AppContext.getInstance().get("selecionado")).getId(), Estado.RECHAZADA);
+                oo.cambiarEstado(((Oferta) AppContext.getInstance().get(ContextKeys.SELECCIONADO)).getId(), Estado.RECHAZADA);
                 confirmarModificacion();
             }
         }

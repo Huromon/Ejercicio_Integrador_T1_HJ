@@ -61,6 +61,16 @@ public class AppContext {
     public void put(String key, Object value) {
         datos.put(key, value);
     }
+
+    /**
+     * Elimina el valor asociado a la clave indicada.
+     *
+     * @param key clave del dato que se desea eliminar.
+     */
+    public void remove(String key) {
+        datos.remove(key);
+    }
+
     /**
      * Elimina todos los datos compartidos del contexto.
      */

@@ -1,6 +1,7 @@
 package com.tracker.business;
 
 import com.tracker.common.AppContext;
+import com.tracker.common.ContextKeys;
 import com.tracker.data.entity.Empresa;
 import com.tracker.data.repository.EmpresaRepository;
 import com.tracker.exception.NoEncontradoException;
@@ -26,7 +27,7 @@ public class EmpresaServiceImpl implements EmpresaService {
     public EmpresaServiceImpl(EmpresaRepository empresaRepository) {
 
         this.empresaRepository = empresaRepository;
-        AppContext.getInstance().put("empresaService", this);
+        AppContext.getInstance().put(ContextKeys.EMPRESA_SERVICE, this);
     }
 
     @Override

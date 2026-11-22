@@ -3,6 +3,7 @@ package com.tracker.controllers;
 import com.tracker.business.EmpresaServiceImpl;
 import com.tracker.business.OfertaServiceImpl;
 import com.tracker.common.AppContext;
+import com.tracker.common.ContextKeys;
 import com.tracker.common.SceneNavegator;
 import com.tracker.data.entity.Empresa;
 import com.tracker.data.entity.Oferta;
@@ -19,7 +20,6 @@ import javafx.scene.layout.BorderPane;
 
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -43,6 +43,7 @@ public class ListadoController implements Initializable {
     @FXML
     private TableView<Oferta> tCandidaturas;
 
+    @FXML
     private Button btnFiltrar;
     @FXML
     private Button btnQuitarFiltro;
@@ -51,27 +52,30 @@ public class ListadoController implements Initializable {
     private BorderPane fondo;
     private OfertaServiceImpl oo;
     private EmpresaServiceImpl oo2;
-public ListadoController(){
-    Boolean filt =(Boolean) AppContext.getInstance().get("filtra");
-if(filt){
-    this.oo = (OfertaServiceImpl) AppContext.getInstance().get("filtrado");
-}else {
-    this.oo = (OfertaServiceImpl) AppContext.getInstance().get("ofertasevices");
-}
-oo2 = (EmpresaServiceImpl) AppContext.getInstance().get("empresaService");
 
-}
     /**
-     * Registra un listener que guarda en el contexto la candidatura seleccionada en la tabla.
+     * Crea el controlador del listado.
+     */
+    public ListadoController() {
+    }
+
+    /**
+     * Carga las ofertas filtradas o todas, según el estado del contexto, y
+     * registra los eventos de la tabla.
      *
      * @param location  ubicación del archivo FXML.
      * @param resources recursos de internacionalización de la vista.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        oo = (OfertaServiceImpl) AppContext.getInstance().get(ContextKeys.OFERTA_SERVICE);
+        oo2 = (EmpresaServiceImpl) AppContext.getInstance().get(ContextKeys.EMPRESA_SERVICE);
 
-        List<Oferta> listaofert = oo.listarTodas();
-
+        boolean filtrando = Boolean.TRUE.equals(AppContext.getInstance().get(ContextKeys.FILTRA));
+        Object guardadas = AppContext.getInstance().get(ContextKeys.OFERTAS_FILTRADAS);
+        List<Oferta> datos = filtrando && guardadas instanceof List<?> l
+                ? l.stream().map(Oferta.class::cast).toList()
+                : oo.listarTodas();
 
         configurarColumnas();
 
@@ -88,37 +92,41 @@ oo2 = (EmpresaServiceImpl) AppContext.getInstance().get("empresaService");
             }
 
             if (!clicDentroDeTabla) {
-                AppContext.getInstance().put("selecionado", null);
+                AppContext.getInstance().put(ContextKeys.SELECCIONADO, null);
                 tCandidaturas.getSelectionModel().clearSelection();
             }
         });
-        cargarOfertasEnTabla(listaofert);
+        cargarOfertasEnTabla(datos);
+        btnQuitarFiltro.setVisible(filtrando);
         tCandidaturas.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 Oferta seleccionada = tCandidaturas.getSelectionModel().getSelectedItem();
                 if (seleccionada != null) {
-                    AppContext.getInstance().put("selecionado", seleccionada);
-
+                    AppContext.getInstance().put(ContextKeys.SELECCIONADO, seleccionada);
                     SceneNavegator.navigateToInjection("Candidatura-view.fxml", "Detalle de Oferta");
                 }
             }
         });
-
-
     }
+
+    /**
+     * Configura las columnas de la tabla de candidaturas.
+     */
     private void configurarColumnas() {
         cId.setCellValueFactory(cell -> new SimpleStringProperty(
                 cell.getValue().getId() != null ? String.valueOf(cell.getValue().getId()) : ""
         ));
 
         cTitulo.setCellValueFactory(cell -> new SimpleStringProperty(
-
                 cell.getValue().getTitulo() != null ? cell.getValue().getTitulo() : ""
         ));
 
-        cEmpresa.setCellValueFactory(cell -> new SimpleStringProperty(
-                cell.getValue().getIdEmpresa() != null ? String.valueOf(( (Empresa) (oo2.buscarPorId(cell.getValue().getIdEmpresa())).get()).getNombre()) : ""
-        ));
+        cEmpresa.setCellValueFactory(cell -> {
+            Oferta oferta = cell.getValue();
+            String nombre = oferta.getIdEmpresa() == null ? ""
+                    : oo2.buscarPorId(oferta.getIdEmpresa()).map(Empresa::getNombre).orElse("");
+            return new SimpleStringProperty(nombre);
+        });
 
         cEstado.setCellValueFactory(cell -> new SimpleStringProperty(
                 cell.getValue().getEstado() != null ? cell.getValue().getEstado().name() : ""
@@ -133,21 +141,21 @@ oo2 = (EmpresaServiceImpl) AppContext.getInstance().get("empresaService");
         ));
     }
 
+    /**
+     * Sustituye el contenido de la tabla por la lista de ofertas indicada.
+     *
+     * @param ofertas ofertas que se van a mostrar.
+     */
     public void cargarOfertasEnTabla(List<Oferta> ofertas) {
         tCandidaturas.getItems().setAll(ofertas);
     }
-
-
-
-
-
 
     /**
      * Abre la vista de filtrado de candidaturas.
      *
      * @param actionEvent evento producido al pulsar el botón.
      */
-    @javafx.fxml.FXML
+    @FXML
     public void onClickFiltrar(ActionEvent actionEvent) {
         SceneNavegator.navigateToInjection("filtro-view.fxml","Filtrar");
     }
@@ -157,9 +165,12 @@ oo2 = (EmpresaServiceImpl) AppContext.getInstance().get("empresaService");
      *
      * @param actionEvent evento producido al pulsar el botón.
      */
-    @javafx.fxml.FXML
+    @FXML
     public void onClickQuitarFiltro(ActionEvent actionEvent) {
-
+        AppContext.getInstance().put(ContextKeys.FILTRA, false);
+        AppContext.getInstance().remove(ContextKeys.OFERTAS_FILTRADAS);
+        cargarOfertasEnTabla(oo.listarTodas());
+        btnQuitarFiltro.setVisible(false);
     }
 
     /**
@@ -167,9 +178,8 @@ oo2 = (EmpresaServiceImpl) AppContext.getInstance().get("empresaService");
      *
      * @param actionEvent evento producido al pulsar el botón.
      */
-    @javafx.fxml.FXML
+    @FXML
     public void onClickNueva(ActionEvent actionEvent) {
         SceneNavegator.navigateToInjection("nuevo-view.fxml","Añadir");
     }
-
 }

@@ -3,6 +3,7 @@ package com.tracker.controllers;
 import com.tracker.business.EmpresaServiceImpl;
 import com.tracker.business.OfertaServiceImpl;
 import com.tracker.common.AppContext;
+import com.tracker.common.ContextKeys;
 import com.tracker.common.SceneNavegator;
 import com.tracker.data.entity.Empresa;
 import com.tracker.data.entity.Estado;
@@ -52,7 +53,7 @@ public class AñadirController implements Initializable {
     private TextField inpTitulo;
     private OfertaServiceImpl oo;
     public AñadirController() {
-        this.oo = (OfertaServiceImpl) AppContext.getInstance().get("ofertasevices");
+        this.oo = (OfertaServiceImpl) AppContext.getInstance().get(ContextKeys.OFERTA_SERVICE);
     }
 
     /**
@@ -71,7 +72,7 @@ public class AñadirController implements Initializable {
                 "Aceptada",
                 "Rechazada"
         );
-        EmpresaServiceImpl empresaService = (EmpresaServiceImpl) AppContext.getInstance().get("empresaService");
+        EmpresaServiceImpl empresaService = (EmpresaServiceImpl) AppContext.getInstance().get(ContextKeys.EMPRESA_SERVICE);
         inpEmpresa.setEditable(true);
         for(Empresa e : empresaService.listarTodas()) {
             inpEmpresa.getItems().add(e.getNombre());
@@ -125,8 +126,8 @@ public void comprobardecimal() {
 }
     public void onClickAñadir(ActionEvent actionEvent) {
 
-        OfertaServiceImpl ofertaService = (OfertaServiceImpl) AppContext.getInstance().get("ofertasevices");
-        EmpresaServiceImpl empresaService = (EmpresaServiceImpl) AppContext.getInstance().get("empresaService");
+        OfertaServiceImpl ofertaService = (OfertaServiceImpl) AppContext.getInstance().get(ContextKeys.OFERTA_SERVICE);
+        EmpresaServiceImpl empresaService = (EmpresaServiceImpl) AppContext.getInstance().get(ContextKeys.EMPRESA_SERVICE);
         String nombreEmpresa = inpEmpresa.getEditor().getText().trim();
         if (nombreEmpresa.isEmpty()) {
             return;
