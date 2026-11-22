@@ -15,7 +15,6 @@ import javafx.scene.control.*;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -38,7 +37,7 @@ public class AñadirController implements Initializable {
     private TextArea inpDesc;
 
     @FXML
-    private ChoiceBox<String> inpEmpresa;
+    private ComboBox<String> inpEmpresa;
 
     @FXML
     private TextField inpEnlace;
@@ -73,11 +72,15 @@ public class AñadirController implements Initializable {
                 "Rechazada"
         );
         EmpresaServiceImpl empresaService = (EmpresaServiceImpl) AppContext.getInstance().get("empresaService");
+        inpEmpresa.setEditable(true);
         for(Empresa e : empresaService.listarTodas()) {
             inpEmpresa.getItems().add(e.getNombre());
         }
         choiceboxEstado.getSelectionModel().selectFirst();
         inpEmpresa.getSelectionModel().selectFirst();
+        inpEmpresa.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+            comprobar();
+        });
         dateFechaPostulacion.valueProperty().addListener((observable, oldValue, newValue) -> {
         comprobar();
         });
@@ -124,11 +127,13 @@ public void comprobardecimal() {
 
         OfertaServiceImpl ofertaService = (OfertaServiceImpl) AppContext.getInstance().get("ofertasevices");
         EmpresaServiceImpl empresaService = (EmpresaServiceImpl) AppContext.getInstance().get("empresaService");
-        Optional<Empresa> f = (Optional<Empresa>) empresaService.buscarPorNombre(inpEmpresa.getValue());
-        Integer id_Empresa=null;
-        if(f.isPresent()) {
-          id_Empresa=f.get().getId();
+        String nombreEmpresa = inpEmpresa.getEditor().getText().trim();
+        if (nombreEmpresa.isEmpty()) {
+            return;
         }
+        Empresa empresa = empresaService.buscarPorNombre(nombreEmpresa).orElseGet(() ->
+                empresaService.crear(nombreEmpresa, null, null));
+        Integer id_Empresa = empresa.getId();
         if(id_Empresa!=null && ofertaService != null) {
             comprobardecimal();
 
@@ -164,7 +169,8 @@ public void comprobardecimal() {
         SceneNavegator.navigateToInjection("main-view.fxml","Pagina Principal");
     }
     public void comprobar() {
-        if(inpTitulo.getText().isEmpty() || dateFechaPostulacion.getValue() == null ) {
+        String nombreEmpresa = inpEmpresa.getEditor().getText().trim();
+        if(inpTitulo.getText().isEmpty() || dateFechaPostulacion.getValue() == null || nombreEmpresa.isEmpty()) {
             btnAñadir.setDisable(true);
         }else{
             btnAñadir.setDisable(false);
