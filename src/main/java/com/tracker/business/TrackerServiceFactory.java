@@ -2,12 +2,13 @@ package com.tracker.business;
 
 import com.tracker.data.DataBaseInitializer;
 import com.tracker.data.TransaccionManager;
+import com.tracker.data.config.HibernateConfig;
 import com.tracker.data.repository.*;
 
 /**
  * Punto único de composición de los servicios de la aplicación v2.0.
  * <p>
- * Crea una sola vez los repositorios JDBC y los servicios de negocio,
+ * Crea una sola vez los repositorios Hibernate y los servicios de negocio,
  * los conecta entre sí y los expone a la interfaz JavaFX del compañero.
  * </p>
  */
@@ -24,17 +25,18 @@ public final class TrackerServiceFactory {
     }
 
     /**
-     * Inicializa la base de datos y construye los servicios una sola vez.
+     * Inicializa la base de datos, Hibernate y los servicios una sola vez.
      */
     public static void inicializar() {
         if (empresaService != null) {
             return;
         }
         DataBaseInitializer.inicializar();
+        HibernateConfig.inicializar();
 
-        EmpresaRepository empresaRepository = new EmpresaJdbcRepository();
-        OfertaRepository ofertaRepository = new OfertaJdbcRepository();
-        EntrevistaRepository entrevistaRepository = new EntrevistaJdbcRepository();
+        EmpresaRepository empresaRepository = new EmpresaHibernateRepository();
+        OfertaRepository ofertaRepository = new OfertaHibernateRepository();
+        EntrevistaRepository entrevistaRepository = new EntrevistaHibernateRepository();
         TransaccionManager transaccionManager = new TransaccionManager();
 
         empresaService = new EmpresaServiceImpl(empresaRepository);

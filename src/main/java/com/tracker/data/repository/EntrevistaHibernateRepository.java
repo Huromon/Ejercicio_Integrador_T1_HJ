@@ -7,16 +7,14 @@ import com.tracker.data.entity.EntrevistaDetalle;
 import com.tracker.data.entity.Oferta;
 import org.hibernate.Session;
 
-import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * Repositorio Hibernate de entrevistas.
  * <p>
- * Mantiene el contrato JDBC hasta la Parte 4, incluidos los dos métodos que
- * reciben una {@link Connection}; esos métodos no se usan en esta fase y se
- * retirarán cuando los servicios pasen a trabajar con {@code Session}.
+ * Realiza el CRUD y la consulta de detalle con HQL sobre el
+ * {@link org.hibernate.SessionFactory} de la aplicación.
  * </p>
  */
 public class EntrevistaHibernateRepository implements EntrevistaRepository {
@@ -96,21 +94,21 @@ public class EntrevistaHibernateRepository implements EntrevistaRepository {
      */
     @Override
     public List<EntrevistaDetalle> buscarPorOferta(Integer idOferta) {
+        String hql = "select en, o, e from Entrevista en, Oferta o, Empresa e " +
+                "where en.idOferta = o.id and o.idEmpresa = e.id and en.idOferta = :id";
         try (Session s = HibernateConfig.getSessionFactory().openSession()) {
-            List<Entrevista> entrevistas = s.createQuery(
-                    "from Entrevista en where en.idOferta = :id", Entrevista.class)
+            List<Object[]> filas = s.createQuery(hql, Object[].class)
                     .setParameter("id", idOferta)
                     .getResultList();
-            return entrevistas.stream().map(en -> {
-                Oferta oferta = s.find(Oferta.class, en.getIdOferta());
-                Empresa empresa = oferta == null ? null : s.find(Empresa.class, oferta.getIdEmpresa());
-                String titulo = oferta == null ? "" : oferta.getTitulo();
-                String nombreEmpresa = empresa == null ? "" : empresa.getNombre();
+            return filas.stream().map(fila -> {
+                Entrevista en = (Entrevista) fila[0];
+                Oferta oferta = (Oferta) fila[1];
+                Empresa empresa = (Empresa) fila[2];
                 return new EntrevistaDetalle(
                         en.getId(),
                         en.getIdOferta(),
-                        titulo,
-                        nombreEmpresa,
+                        oferta.getTitulo(),
+                        empresa.getNombre(),
                         en.getFecha(),
                         en.getTipo(),
                         en.getNotas(),
@@ -118,30 +116,5 @@ public class EntrevistaHibernateRepository implements EntrevistaRepository {
                 );
             }).toList();
         }
-    }
-
-    /**
-     * Método heredado de la fase JDBC que este repositorio no soporta.
-     *
-     * @param entrevista entrevista a guardar.
-     * @param conn       conexión JDBC.
-     * @return nunca, porque lanza una excepción.
-     * @throws UnsupportedOperationException siempre, porque se retirará en la Parte 4.
-     */
-    @Override
-    public Entrevista guardar(Entrevista entrevista, Connection conn) {
-        throw new UnsupportedOperationException("Método JDBC retirado en la Parte 4.");
-    }
-
-    /**
-     * Método heredado de la fase JDBC que este repositorio no soporta.
-     *
-     * @param idOferta identificador de la oferta.
-     * @param conn     conexión JDBC.
-     * @throws UnsupportedOperationException siempre, porque se retirará en la Parte 4.
-     */
-    @Override
-    public void eliminarPorOferta(Integer idOferta, Connection conn) {
-        throw new UnsupportedOperationException("Método JDBC retirado en la Parte 4.");
     }
 }

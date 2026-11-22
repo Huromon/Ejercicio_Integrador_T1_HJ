@@ -31,9 +31,9 @@ public interface OfertaService {
      * Filtra ofertas por cualquier combinación de empresa, estado, salario, fechas y texto.
      *
      * @param filtro criterios de filtrado.
-     * @return lista de ofertas con datos de la empresa que cumplen los criterios.
+     * @return lista de ofertas que cumplen los criterios.
      */
-    List<OfertaDetalle> filtrar(FiltroOferta filtro);
+    List<Oferta> filtrar(FiltroOferta filtro);
 
     /**
      * Devuelve todas las ofertas registradas.

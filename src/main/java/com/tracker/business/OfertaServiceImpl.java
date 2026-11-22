@@ -5,7 +5,6 @@ import com.tracker.data.TransaccionManager;
 import com.tracker.data.entity.*;
 import com.tracker.data.repository.EmpresaRepository;
 import com.tracker.data.repository.EntrevistaRepository;
-import com.tracker.data.repository.OfertaJdbcRepository;
 import com.tracker.data.repository.OfertaRepository;
 import com.tracker.exception.NoEncontradoException;
 import com.tracker.exception.ValidacionException;
@@ -78,10 +77,10 @@ public class OfertaServiceImpl implements OfertaService {
      * Filtra ofertas por cualquier combinación de criterios; un filtro nulo devuelve todas.
      *
      * @param filtro criterios de filtrado.
-     * @return lista de ofertas con datos de la empresa que cumplen los criterios.
+     * @return lista de ofertas que cumplen los criterios.
      */
     @Override
-    public List<OfertaDetalle> filtrar(FiltroOferta filtro) {
+    public List<Oferta> filtrar(FiltroOferta filtro) {
         return ofertaRepository.filtrar(filtro != null ? filtro : new FiltroOferta(null, null, null, null, null, null, null));
     }
 
@@ -94,9 +93,16 @@ public class OfertaServiceImpl implements OfertaService {
     public List<Oferta> listarTodas() {
         return ofertaRepository.buscarTodos();
     }
+
+    /**
+     * Devuelve el repositorio de ofertas que utiliza este servicio.
+     *
+     * @return el repositorio de ofertas.
+     */
     public OfertaRepository getOfertaRepository() {
         return this.ofertaRepository;
     }
+
     /**
      * Busca una oferta por su identificador.
      *
@@ -112,7 +118,7 @@ public class OfertaServiceImpl implements OfertaService {
     }
 
     /**
-     * Borra las entrevistas de la oferta y la oferta usando la misma conexión transaccional.
+     * Borra las entrevistas de la oferta y la oferta en una sola transacción Hibernate.
      *
      * @param id identificador de la oferta a eliminar.
      */
@@ -121,9 +127,17 @@ public class OfertaServiceImpl implements OfertaService {
         if (id == null || ofertaRepository.buscarPorId(id).isEmpty()) {
             throw new NoEncontradoException("No se encuentra la oferta con ID: " + id);
         }
-        transaccionManager.ejecutarEnTransaccion(conn -> {
-            entrevistaRepository.eliminarPorOferta(id, conn);
-            ofertaRepository.eliminar(id, conn);
+        transaccionManager.ejecutarEnTransaccion(session -> {
+            Oferta oferta = session.find(Oferta.class, id);
+            if (oferta == null) {
+                throw new NoEncontradoException("No se encuentra la oferta con ID: " + id);
+            }
+            List<Entrevista> entrevistas = session.createQuery(
+                    "from Entrevista en where en.idOferta = :id", Entrevista.class)
+                    .setParameter("id", id)
+                    .getResultList();
+            entrevistas.forEach(session::remove);
+            session.remove(oferta);
             return null;
         });
     }

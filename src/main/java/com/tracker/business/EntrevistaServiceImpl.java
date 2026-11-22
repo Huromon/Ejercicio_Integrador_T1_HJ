@@ -5,6 +5,7 @@ import com.tracker.data.TransaccionManager;
 import com.tracker.data.entity.Entrevista;
 import com.tracker.data.entity.EntrevistaDetalle;
 import com.tracker.data.entity.Estado;
+import com.tracker.data.entity.Oferta;
 import com.tracker.data.repository.EntrevistaRepository;
 import com.tracker.data.repository.OfertaRepository;
 import com.tracker.exception.NoEncontradoException;
@@ -57,12 +58,15 @@ public class EntrevistaServiceImpl implements EntrevistaService {
         if (fecha == null) {
             throw new ValidacionException("La fecha de la entrevista es obligatoria.");
         }
-        return transaccionManager.ejecutarEnTransaccion(conn -> {
+        return transaccionManager.ejecutarEnTransaccion(session -> {
             Entrevista nueva = new Entrevista(null, idOferta, fecha, tipo, notas, resultado);
-            Entrevista guardada = entrevistaRepository.guardar(nueva, conn);
-
-            ofertaRepository.cambiarEstado(idOferta, Estado.ENTREVISTA, conn);
-            return guardada;
+            session.persist(nueva);
+            Oferta oferta = session.find(Oferta.class, idOferta);
+            if (oferta == null) {
+                throw new NoEncontradoException("No se encuentra la oferta con ID: " + idOferta);
+            }
+            oferta.setEstado(Estado.ENTREVISTA);
+            return nueva;
         });
     }
 

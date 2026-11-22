@@ -1,24 +1,20 @@
 package com.tracker.data.repository;
 
 import com.tracker.data.config.HibernateConfig;
-import com.tracker.data.entity.Empresa;
 import com.tracker.data.entity.Entrevista;
 import com.tracker.data.entity.Estado;
 import com.tracker.data.entity.FiltroOferta;
 import com.tracker.data.entity.Oferta;
-import com.tracker.data.entity.OfertaDetalle;
 import org.hibernate.Session;
 
-import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * Repositorio Hibernate de ofertas.
  * <p>
- * Mantiene el contrato JDBC hasta la Parte 4, incluidos los dos métodos que
- * reciben una {@link Connection}; esos métodos no se usan en esta fase y se
- * retirarán cuando los servicios pasen a trabajar con {@code Session}.
+ * Realiza el CRUD y las consultas de ofertas con HQL sobre el
+ * {@link org.hibernate.SessionFactory} de la aplicación.
  * </p>
  */
 public class OfertaHibernateRepository implements OfertaRepository {
@@ -78,13 +74,13 @@ public class OfertaHibernateRepository implements OfertaRepository {
     }
 
     /**
-     * Busca ofertas que cumplen los criterios del filtro y añade el nombre de la empresa.
+     * Busca ofertas que cumplen los criterios del filtro.
      *
      * @param filtro criterios de filtrado.
-     * @return lista de ofertas con el nombre de la empresa.
+     * @return lista de ofertas que cumplen los criterios.
      */
     @Override
-    public List<OfertaDetalle> filtrar(FiltroOferta filtro) {
+    public List<Oferta> filtrar(FiltroOferta filtro) {
         StringBuilder hql = new StringBuilder(
                 "select o from Oferta o, Empresa e where o.idEmpresa = e.id and 1=1 ");
         if (filtro.getEmpresa() != null) {
@@ -114,7 +110,7 @@ public class OfertaHibernateRepository implements OfertaRepository {
                 consulta.setParameter("empresa", "%" + filtro.getEmpresa() + "%");
             }
             if (filtro.getEstado() != null) {
-                consulta.setParameter("estado", filtro.getEstado().name());
+                consulta.setParameter("estado", filtro.getEstado());
             }
             if (filtro.getSalarioMin() != null) {
                 consulta.setParameter("smin", filtro.getSalarioMin());
@@ -131,21 +127,7 @@ public class OfertaHibernateRepository implements OfertaRepository {
             if (filtro.getTexto() != null && !filtro.getTexto().isBlank()) {
                 consulta.setParameter("txt", "%" + filtro.getTexto() + "%");
             }
-            return consulta.getResultList().stream().map(oferta -> {
-                Empresa empresa = s.find(Empresa.class, oferta.getIdEmpresa());
-                String nombre = empresa == null ? "" : empresa.getNombre();
-                return new OfertaDetalle(
-                        oferta.getId(),
-                        oferta.getTitulo(),
-                        nombre,
-                        oferta.getEstado(),
-                        oferta.getFechaPostulacion(),
-                        oferta.getEnlace(),
-                        oferta.getDescripcion(),
-                        oferta.getSalario(),
-                        oferta.getNotas()
-                );
-            }).toList();
+            return consulta.getResultList();
         }
     }
 
@@ -184,30 +166,5 @@ public class OfertaHibernateRepository implements OfertaRepository {
                 oferta.setEstado(estado);
             }
         });
-    }
-
-    /**
-     * Método heredado de la fase JDBC que este repositorio no soporta.
-     *
-     * @param id     identificador de la oferta.
-     * @param estado nuevo estado de la candidatura.
-     * @param conn   conexión JDBC.
-     * @throws UnsupportedOperationException siempre, porque se retirará en la Parte 4.
-     */
-    @Override
-    public void cambiarEstado(Integer id, Estado estado, Connection conn) {
-        throw new UnsupportedOperationException("Método JDBC retirado en la Parte 4.");
-    }
-
-    /**
-     * Método heredado de la fase JDBC que este repositorio no soporta.
-     *
-     * @param id   identificador de la oferta.
-     * @param conn conexión JDBC.
-     * @throws UnsupportedOperationException siempre, porque se retirará en la Parte 4.
-     */
-    @Override
-    public void eliminar(Integer id, Connection conn) {
-        throw new UnsupportedOperationException("Método JDBC retirado en la Parte 4.");
     }
 }

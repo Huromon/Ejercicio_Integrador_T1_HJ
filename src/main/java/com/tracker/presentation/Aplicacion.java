@@ -1,9 +1,9 @@
 package com.tracker.presentation;
-import com.tracker.business.EmpresaService;
+
 import com.tracker.business.TrackerServiceFactory;
 import com.tracker.common.AppContext;
 import com.tracker.common.SceneNavegator;
-import com.tracker.data.TransaccionManager;
+import com.tracker.data.config.HibernateConfig;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -26,5 +26,13 @@ public class Aplicacion extends Application{
         SceneNavegator.setStage(stage);
         SceneNavegator.navigateTo("main-view.fxml","Pagina Principal");
         stage.show();
+    }
+
+    /**
+     * Cierra el {@link org.hibernate.SessionFactory} cuando se cierra la ventana.
+     */
+    @Override
+    public void stop() {
+        HibernateConfig.cerrar();
     }
 }

@@ -3,9 +3,7 @@ package com.tracker.data.repository;
 import com.tracker.data.entity.Estado;
 import com.tracker.data.entity.FiltroOferta;
 import com.tracker.data.entity.Oferta;
-import com.tracker.data.entity.OfertaDetalle;
 
-import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -14,12 +12,12 @@ import java.util.List;
 public interface OfertaRepository extends Repositorio<Oferta> {
 
     /**
-     * Busca ofertas que cumplen una combinación de criterios, con datos de su empresa.
+     * Busca ofertas que cumplen una combinación de criterios.
      *
      * @param filtro criterios de filtrado.
-     * @return lista de ofertas con el nombre de la empresa.
+     * @return lista de ofertas que cumplen los criterios.
      */
-    List<OfertaDetalle> filtrar(FiltroOferta filtro);
+    List<Oferta> filtrar(FiltroOferta filtro);
 
     /**
      * Elimina una oferta y las entrevistas asociadas.
@@ -35,21 +33,4 @@ public interface OfertaRepository extends Repositorio<Oferta> {
      * @param estado nuevo estado de la candidatura.
      */
     void cambiarEstado(Integer id, Estado estado);
-
-    /**
-     * Cambia el estado de una candidatura usando una conexión existente.
-     *
-     * @param id     identificador de la oferta.
-     * @param estado nuevo estado de la candidatura.
-     * @param conn   conexión abierta por el gestor de transacciones.
-     */
-    void cambiarEstado(Integer id, Estado estado, Connection conn);
-
-    /**
-     * Borra una oferta usando una conexión existente.
-     *
-     * @param id   identificador de la oferta a eliminar.
-     * @param conn conexión abierta por el gestor de transacciones.
-     */
-    void eliminar(Integer id, Connection conn);
 }
