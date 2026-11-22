@@ -74,7 +74,7 @@ public class AppContext {
     /**
      * Elimina todos los datos compartidos del contexto.
      */
-    public void delet(){
+    public void clear(){
         datos.clear();
     }
 

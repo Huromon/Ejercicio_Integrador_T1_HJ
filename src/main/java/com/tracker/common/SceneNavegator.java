@@ -4,10 +4,10 @@ import com.tracker.controllers.AñadirController;
 import com.tracker.controllers.DetallesController;
 import com.tracker.controllers.FiltroController;
 import com.tracker.controllers.ListadoController;
-import com.tracker.data.entity.Oferta;
 import com.tracker.presentation.Aplicacion;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,16 +27,14 @@ public class SceneNavegator {
      * @param title título a mostrar en la ventana.
      * @throws IOException si no se puede cargar la vista.
      */
-    public static void navigateTo(String fxml,String title) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Aplicacion.class.getResource("/com/tracker/views/" +fxml));
-        Scene scene = null;
-
+    public static void navigateTo(String fxml, String title) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Aplicacion.class.getResource("/com/tracker/views/" + fxml));
         try {
-            scene = new Scene(fxmlLoader. load());
+            Scene scene = new Scene(fxmlLoader.load());
             stage.setTitle(title);
             stage.setScene(scene);
         } catch (IOException e) {
-            System.out.println("lol");
+            mostrarError(fxml, e);
         }
     }
 
@@ -55,12 +53,8 @@ public class SceneNavegator {
      * @param fxml  nombre del archivo FXML a cargar.
      * @param title título a mostrar en la ventana.
      */
-    public static void navigateToInjection(String fxml, String title)  {
+    public static void navigateToInjection(String fxml, String title) {
         FXMLLoader fxmlLoader = new FXMLLoader(Aplicacion.class.getResource("/com/tracker/views/" + fxml));
-
-
-
-
         fxmlLoader.setControllerFactory(type -> {
             switch (fxml) {
                 case "nuevo-view.fxml":   return new AñadirController();
@@ -74,8 +68,22 @@ public class SceneNavegator {
             Scene scene = new Scene(fxmlLoader.load());
             stage.setTitle(title);
             stage.setScene(scene);
-        }catch (IOException e){
-
+        } catch (IOException e) {
+            mostrarError(fxml, e);
         }
+    }
+
+    /**
+     * Muestra un diálogo de error cuando no se puede cargar una vista.
+     *
+     * @param fxml nombre del archivo FXML que no se pudo cargar.
+     * @param e    excepción producida al cargar la vista.
+     */
+    private static void mostrarError(String fxml, IOException e) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("No se pudo cargar la vista");
+        alert.setContentText(fxml + "\n" + e.getMessage());
+        alert.showAndWait();
     }
 }

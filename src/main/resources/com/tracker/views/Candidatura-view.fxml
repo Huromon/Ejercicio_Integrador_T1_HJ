@@ -21,7 +21,7 @@
             </HBox>
             <HBox alignment="CENTER" spacing="10.0">
                <children>
-                  <Label text="Titulo:" />
+                  <Label text="Título:" />
                   <Label fx:id="txtTitulo" text="Label" />
                </children>
             </HBox>
@@ -42,7 +42,7 @@
             </HBox>
             <HBox alignment="CENTER" spacing="10.0">
                <children>
-                  <Label text="Fecha de postulacion:" />
+                  <Label text="Fecha de postulación:" />
                   <Label fx:id="txtFechaPostulacion" text="Label" />
                </children>
             </HBox>
@@ -54,13 +54,13 @@
             </HBox>
             <HBox alignment="CENTER" spacing="10.0">
                <children>
-                  <Label text="Nota:" />
+                  <Label text="Notas:" />
                   <Label fx:id="txtNotas" text="Label" />
                </children>
             </HBox>
             <HBox alignment="TOP_CENTER" spacing="5.0">
                <children>
-                  <Label text="Descripcion:" />
+                  <Label text="Descripción:" />
                   <Label fx:id="txtDescripcion" alignment="TOP_LEFT" prefHeight="55.0" prefWidth="263.0" text="Label" />
                </children>
             </HBox>

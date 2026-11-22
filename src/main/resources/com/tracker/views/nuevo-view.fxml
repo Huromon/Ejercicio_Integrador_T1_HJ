@@ -18,7 +18,7 @@
          <children>
             <HBox alignment="CENTER" fillHeight="false" spacing="20.0">
                <children>
-                  <Label text="Titulo" />
+                  <Label text="Título" />
                   <TextField fx:id="inpTitulo" />
                </children>
             </HBox>
@@ -30,7 +30,7 @@
             </HBox>
             <HBox alignment="TOP_CENTER" fillHeight="false" spacing="10.0">
                <children>
-                  <Label text="Descripcion" />
+                  <Label text="Descripción" />
                   <TextArea fx:id="inpDesc" prefHeight="68.0" prefWidth="226.0" wrapText="true" />
                </children>
             </HBox>
@@ -42,7 +42,7 @@
             </HBox>
             <HBox alignment="CENTER" fillHeight="false" spacing="10.0">
                <children>
-                  <Label text="Fecha de postulacion" />
+                  <Label text="Fecha de postulación" />
                   <DatePicker fx:id="dateFechaPostulacion" />
                </children>
             </HBox>

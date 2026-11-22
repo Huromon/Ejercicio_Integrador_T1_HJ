@@ -25,7 +25,7 @@ public class Aplicacion extends Application{
         TrackerServiceFactory.inicializar();
         AppContext.getInstance().put(ContextKeys.FILTRA, false);
         SceneNavegator.setStage(stage);
-        SceneNavegator.navigateTo("main-view.fxml","Pagina Principal");
+        SceneNavegator.navigateTo("main-view.fxml", "Página Principal");
         stage.show();
     }
 

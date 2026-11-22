@@ -12,9 +12,9 @@
         <columns>
             <TableColumn fx:id="cId" prefWidth="38.0" text="Id" />
             <TableColumn fx:id="cEmpresa" prefWidth="145.0" text="Empresa" />
-            <TableColumn fx:id="cTitulo" prefWidth="143.0" text="Titulo" />
+            <TableColumn fx:id="cTitulo" prefWidth="143.0" text="Título" />
             <TableColumn fx:id="cEstado" prefWidth="75.0" text="Estado" />
-          <TableColumn fx:id="cFechaPostulacion" prefWidth="160.0" text="fecha de postulacion" />
+          <TableColumn fx:id="cFechaPostulacion" prefWidth="160.0" text="Fecha de postulación" />
             <TableColumn fx:id="cSalario" prefWidth="75.0" text="Salario" />
         </columns>
          <columnResizePolicy>

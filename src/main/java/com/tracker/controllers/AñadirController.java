@@ -87,19 +87,23 @@ public class AñadirController implements Initializable {
         });
 
         inpTitulo.textProperty().addListener((observable, oldValue, newValue) -> {
-        comprobar();
+            comprobar();
         });
         inpSalario.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(inpSalario.isFocused()) {
+            if (inpSalario.isFocused()) {
                 configurarSoloDecimales(inpSalario);
             }
 
             comprobar();
         });
-
-
+        comprobar();
     }
 
+    /**
+     * Configura un campo de texto para admitir solo decimales con dos cifras.
+     *
+     * @param textField campo que se va a configurar.
+     */
     private void configurarSoloDecimales(TextField textField) {
         textField.setTextFormatter(new javafx.scene.control.TextFormatter<>(change -> {
             String nuevoTexto = change.getControlNewText();
@@ -110,20 +114,11 @@ public class AñadirController implements Initializable {
             return null;
         }));
     }
-public void comprobardecimal() {
-    if(inpSalario.getText()!=null){
-        if(inpSalario.getText().endsWith(".")) {
-            inpSalario.setText(inpSalario.getText().concat("00"));
-        }else if(inpSalario.getText().endsWith(".?")) {
-            inpSalario.setText(inpSalario.getText().concat("0"));
-        }if(!inpSalario.getText().endsWith(".??")) {
-            inpSalario.setText(inpSalario.getText().concat(".00"));
-        }
-        BigDecimal salario = new BigDecimal(inpSalario.getText());
-        System.out.println(salario);
-    }
-
-}
+    /**
+     * Da de alta la oferta con los datos de la vista y vuelve al listado.
+     *
+     * @param actionEvent evento producido al pulsar el botón.
+     */
     public void onClickAñadir(ActionEvent actionEvent) {
 
         OfertaServiceImpl ofertaService = (OfertaServiceImpl) AppContext.getInstance().get(ContextKeys.OFERTA_SERVICE);
@@ -136,9 +131,7 @@ public void comprobardecimal() {
                 empresaService.crear(nombreEmpresa, null, null));
         Integer id_Empresa = empresa.getId();
         if(id_Empresa!=null && ofertaService != null) {
-            comprobardecimal();
-
-            Oferta o = new Oferta ();
+            Oferta o = new Oferta();
             o.setIdEmpresa(id_Empresa);
             o.setTitulo(inpTitulo.getText());
             o.setDescripcion((inpDesc.getText().isEmpty()) ? "" : inpDesc.getText());
@@ -160,15 +153,24 @@ public void comprobardecimal() {
 
 
 
-            SceneNavegator.navigateToInjection("main-view.fxml","Pagina Principal");
+            SceneNavegator.navigateToInjection("main-view.fxml","Página Principal");
         }
 
 
     }
 
+    /**
+     * Cancela el alta y vuelve al listado de candidaturas.
+     *
+     * @param actionEvent evento producido al pulsar el botón.
+     */
     public void onClickCancelar(ActionEvent actionEvent) {
-        SceneNavegator.navigateToInjection("main-view.fxml","Pagina Principal");
+        SceneNavegator.navigateToInjection("main-view.fxml", "Página Principal");
     }
+
+    /**
+     * Habilita el botón de alta solo cuando hay título, fecha y empresa.
+     */
     public void comprobar() {
         String nombreEmpresa = inpEmpresa.getEditor().getText().trim();
         if(inpTitulo.getText().isEmpty() || dateFechaPostulacion.getValue() == null || nombreEmpresa.isEmpty()) {
