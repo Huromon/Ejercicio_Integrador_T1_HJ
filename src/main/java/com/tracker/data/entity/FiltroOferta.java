@@ -1,18 +1,35 @@
 package com.tracker.data.entity;
 
+import lombok.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
  * Criterios de filtrado de ofertas. Los campos nulos se ignoran en la consulta.
- *
- * @param empresa    texto a buscar en el nombre de la empresa.
- * @param estado     estado de la candidatura.
- * @param salarioMin salario mínimo de la oferta.
- * @param salarioMax salario máximo de la oferta.
- * @param fechaDesde fecha de postulación mínima.
- * @param fechaHasta fecha de postulación máxima.
- * @param texto      texto a buscar en el título o la descripción.
+ * <p>
+ * Permite buscar por nombre de empresa, estado, salario mínimo y máximo, rango
+ * de fechas de postulación y texto libre en el título o la descripción.
+ * </p>
  */
-public record FiltroOferta(String empresa, Estado estado, BigDecimal salarioMin, BigDecimal salarioMax,
-                           LocalDate fechaDesde, LocalDate fechaHasta, String texto) {}
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class FiltroOferta {
+
+    private String empresa;
+
+    private Estado estado;
+
+    private BigDecimal salarioMin;
+
+    private BigDecimal salarioMax;
+
+    private LocalDate fechaDesde;
+
+    private LocalDate fechaHasta;
+
+    private String texto;
+}

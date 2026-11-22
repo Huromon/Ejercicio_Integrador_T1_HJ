@@ -200,16 +200,16 @@ public class OfertaJdbcRepository implements OfertaRepository {
             "FROM OFERTA o JOIN EMPRESA e ON o.id_empresa = e.id WHERE 1=1");
         
         List<Object> params = new ArrayList<>();
-        if (filtro.empresa() != null) { sql.append(" AND e.nombre LIKE ?"); params.add("%" + filtro.empresa() + "%"); }
-        if (filtro.estado() != null) { sql.append(" AND o.estado = ?"); params.add(filtro.estado().name()); }
-        if (filtro.salarioMin() != null) { sql.append(" AND o.salario >= ?"); params.add(filtro.salarioMin()); }
-        if (filtro.salarioMax() != null) { sql.append(" AND o.salario <= ?"); params.add(filtro.salarioMax()); }
-        if (filtro.fechaDesde() != null) { sql.append(" AND o.fechaPostulacion >= ?"); params.add(Date.valueOf(filtro.fechaDesde())); }
-        if (filtro.fechaHasta() != null) { sql.append(" AND o.fechaPostulacion <= ?"); params.add(Date.valueOf(filtro.fechaHasta())); }
-        if (filtro.texto() != null && !filtro.texto().isBlank()) {
+        if (filtro.getEmpresa() != null) { sql.append(" AND e.nombre LIKE ?"); params.add("%" + filtro.getEmpresa() + "%"); }
+        if (filtro.getEstado() != null) { sql.append(" AND o.estado = ?"); params.add(filtro.getEstado().name()); }
+        if (filtro.getSalarioMin() != null) { sql.append(" AND o.salario >= ?"); params.add(filtro.getSalarioMin()); }
+        if (filtro.getSalarioMax() != null) { sql.append(" AND o.salario <= ?"); params.add(filtro.getSalarioMax()); }
+        if (filtro.getFechaDesde() != null) { sql.append(" AND o.fechaPostulacion >= ?"); params.add(Date.valueOf(filtro.getFechaDesde())); }
+        if (filtro.getFechaHasta() != null) { sql.append(" AND o.fechaPostulacion <= ?"); params.add(Date.valueOf(filtro.getFechaHasta())); }
+        if (filtro.getTexto() != null && !filtro.getTexto().isBlank()) {
             sql.append(" AND (o.titulo LIKE ? OR o.descripcion LIKE ?)");
-            params.add("%" + filtro.texto() + "%");
-            params.add("%" + filtro.texto() + "%");
+            params.add("%" + filtro.getTexto() + "%");
+            params.add("%" + filtro.getTexto() + "%");
         }
         
         List<OfertaDetalle> resultados = new ArrayList<>();

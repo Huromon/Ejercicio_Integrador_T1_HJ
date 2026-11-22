@@ -1,18 +1,36 @@
 package com.tracker.data.entity;
 
+import lombok.*;
+
 import java.time.LocalDate;
 
 /**
- * Entrevista con los títulos de la oferta y la empresa, resultado de un JOIN de tres tablas.
- *
- * @param id           identificador de la entrevista.
- * @param idOferta     identificador de la oferta asociada.
- * @param tituloOferta título de la oferta asociada.
- * @param empresa      nombre de la empresa asociada a la oferta.
- * @param fecha        fecha de la entrevista.
- * @param tipo         tipo de entrevista.
- * @param notas        notas sobre la entrevista.
- * @param resultado    resultado de la entrevista.
+ * Entrevista con los datos de la oferta y la empresa, resultado de un JOIN de tres tablas.
+ * <p>
+ * Incluye el identificador de la entrevista y de la oferta, el título de la
+ * oferta, el nombre de la empresa, la fecha, el tipo, las notas y el resultado.
+ * </p>
  */
-public record EntrevistaDetalle(Integer id, Integer idOferta, String tituloOferta, String empresa,
-                                LocalDate fecha, String tipo, String notas, String resultado) {}
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class EntrevistaDetalle {
+
+    private Integer id;
+
+    private Integer idOferta;
+
+    private String tituloOferta;
+
+    private String empresa;
+
+    private LocalDate fecha;
+
+    private String tipo;
+
+    private String notas;
+
+    private String resultado;
+}

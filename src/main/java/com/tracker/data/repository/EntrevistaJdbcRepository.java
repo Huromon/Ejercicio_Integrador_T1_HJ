@@ -49,11 +49,11 @@ public class EntrevistaJdbcRepository implements EntrevistaRepository {
     public Entrevista guardar(Entrevista entrevista, Connection conn) {
         String sql = "INSERT INTO ENTREVISTA (id_oferta, fecha, tipo, notas, resultado) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setInt(1, entrevista.idOferta());
-            stmt.setDate(2, Date.valueOf(entrevista.fecha()));
-            stmt.setString(3, entrevista.tipo());
-            stmt.setString(4, entrevista.notas());
-            stmt.setString(5, entrevista.resultado());
+            stmt.setInt(1, entrevista.getIdOferta());
+            stmt.setDate(2, Date.valueOf(entrevista.getFecha()));
+            stmt.setString(3, entrevista.getTipo());
+            stmt.setString(4, entrevista.getNotas());
+            stmt.setString(5, entrevista.getResultado());
 
             stmt.executeUpdate();
 
@@ -61,11 +61,11 @@ public class EntrevistaJdbcRepository implements EntrevistaRepository {
                 if (rs.next()) {
                     return new Entrevista(
                             rs.getInt(1),
-                            entrevista.idOferta(),
-                            entrevista.fecha(),
-                            entrevista.tipo(),
-                            entrevista.notas(),
-                            entrevista.resultado()
+                            entrevista.getIdOferta(),
+                            entrevista.getFecha(),
+                            entrevista.getTipo(),
+                            entrevista.getNotas(),
+                            entrevista.getResultado()
                     );
                 }
             }
@@ -84,17 +84,17 @@ public class EntrevistaJdbcRepository implements EntrevistaRepository {
      */
     @Override
     public Entrevista actualizar(Entrevista entrevista) {
-        if (entrevista.id() == null) {
+        if (entrevista.getId() == null) {
             throw new ValidacionException("No se puede actualizar una entrevista sin ID.");
         }
         String sql = "UPDATE ENTREVISTA SET fecha = ?, tipo = ?, notas = ?, resultado = ? WHERE id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setDate(1, Date.valueOf(entrevista.fecha()));
-            stmt.setString(2, entrevista.tipo());
-            stmt.setString(3, entrevista.notas());
-            stmt.setString(4, entrevista.resultado());
-            stmt.setInt(5, entrevista.id());
+            stmt.setDate(1, Date.valueOf(entrevista.getFecha()));
+            stmt.setString(2, entrevista.getTipo());
+            stmt.setString(3, entrevista.getNotas());
+            stmt.setString(4, entrevista.getResultado());
+            stmt.setInt(5, entrevista.getId());
             stmt.executeUpdate();
             return entrevista;
         } catch (SQLException e) {

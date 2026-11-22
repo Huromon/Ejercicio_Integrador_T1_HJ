@@ -84,7 +84,7 @@ public class EntrevistaServiceImpl implements EntrevistaService {
             throw new ValidacionException("La fecha de la entrevista es obligatoria.");
         }
         return entrevistaRepository.actualizar(new Entrevista(
-                existente.id(), existente.idOferta(), fecha, tipo, notas, resultado));
+                existente.getId(), existente.getIdOferta(), fecha, tipo, notas, resultado));
     }
 
     /**

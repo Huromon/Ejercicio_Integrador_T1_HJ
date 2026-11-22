@@ -1,20 +1,40 @@
 package com.tracker.data.entity;
 
+import lombok.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
  * Oferta con el nombre de su empresa, resultado de una consulta con JOIN.
- *
- * @param id               identificador de la oferta.
- * @param titulo           título de la oferta.
- * @param empresa          nombre de la empresa asociada.
- * @param estado           estado actual de la candidatura.
- * @param fechaPostulacion fecha de la postulación.
- * @param enlace           enlace a la oferta publicada.
- * @param descripcion      descripción de la oferta.
- * @param salario          salario ofrecido.
- * @param notas            notas sobre la oferta.
+ * <p>
+ * Reúne el identificador y el título de la oferta, el nombre de la empresa, el
+ * estado, la fecha de postulación, el enlace, la descripción, el salario y las
+ * notas en un único objeto de transporte.
+ * </p>
  */
-public record OfertaDetalle(Integer id, String titulo, String empresa, Estado estado, LocalDate fechaPostulacion,
-                            String enlace, String descripcion, BigDecimal salario, String notas) {}
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class OfertaDetalle {
+
+    private Integer id;
+
+    private String titulo;
+
+    private String empresa;
+
+    private Estado estado;
+
+    private LocalDate fechaPostulacion;
+
+    private String enlace;
+
+    private String descripcion;
+
+    private BigDecimal salario;
+
+    private String notas;
+}

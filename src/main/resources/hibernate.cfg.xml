@@ -12,5 +12,6 @@
         <property name="hibernate.format_sql">true</property>
         <mapping class="com.tracker.data.entity.Empresa"/>
         <mapping class="com.tracker.data.entity.Oferta"/>
+        <mapping class="com.tracker.data.entity.Entrevista"/>
     </session-factory>
 </hibernate-configuration>
