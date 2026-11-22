@@ -14,7 +14,7 @@ module EjercicioIntegrador {
     requires org.hibernate.orm.core;
 
 
-    opens com.tracker.data to org.hibernate.orm.core;
+    opens com.tracker.data.entity to org.hibernate.orm.core;
 
 
     opens com.tracker.presentation;
