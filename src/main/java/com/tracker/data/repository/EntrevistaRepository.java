@@ -3,6 +3,7 @@ package com.tracker.data.repository;
 import com.tracker.data.entity.Entrevista;
 import com.tracker.data.entity.EntrevistaDetalle;
 
+import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -25,4 +26,21 @@ public interface EntrevistaRepository extends Repositorio<Entrevista> {
      * @return la entrevista actualizada.
      */
     Entrevista actualizar(Entrevista entrevista);
+
+    /**
+     * Inserta una entrevista usando una conexión existente.
+     *
+     * @param entrevista entrevista a guardar.
+     * @param conn       conexión abierta por el gestor de transacciones.
+     * @return la entrevista guardada con su identificador asignado.
+     */
+    Entrevista guardar(Entrevista entrevista, Connection conn);
+
+    /**
+     * Borra todas las entrevistas asociadas a una oferta usando una conexión existente.
+     *
+     * @param idOferta identificador de la oferta.
+     * @param conn     conexión abierta por el gestor de transacciones.
+     */
+    void eliminarPorOferta(Integer idOferta, Connection conn);
 }

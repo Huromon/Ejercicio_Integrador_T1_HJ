@@ -89,7 +89,7 @@ public class DetallesController implements Initializable {
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText(item.getFecha() + " | " + item.getTipo() + " | " + item.getResultado());
+                    setText(item.fecha() + " | " + item.tipo() + " | " + item.resultado());
                 }
             }
         });

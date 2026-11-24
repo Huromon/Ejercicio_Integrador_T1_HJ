@@ -10,12 +10,6 @@ module EjercicioIntegrador {
     requires javafx.controls;
     requires mysql.connector.j;
     requires static lombok;
-    requires jakarta.persistence;
-    requires org.hibernate.orm.core;
-
-
-    opens com.tracker.data.entity to org.hibernate.orm.core;
-
 
     opens com.tracker.presentation;
     exports com.tracker.presentation to javafx.graphics;

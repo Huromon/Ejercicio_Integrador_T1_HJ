@@ -94,16 +94,9 @@ public class OfertaServiceImpl implements OfertaService {
     public List<Oferta> listarTodas() {
         return ofertaRepository.buscarTodos();
     }
-
-    /**
-     * Devuelve el repositorio de ofertas que utiliza este servicio.
-     *
-     * @return el repositorio de ofertas.
-     */
     public OfertaRepository getOfertaRepository() {
         return this.ofertaRepository;
     }
-
     /**
      * Busca una oferta por su identificador.
      *
@@ -119,7 +112,7 @@ public class OfertaServiceImpl implements OfertaService {
     }
 
     /**
-     * Borra las entrevistas de la oferta y la oferta en una sola transacción Hibernate.
+     * Borra las entrevistas de la oferta y la oferta usando la misma conexión transaccional.
      *
      * @param id identificador de la oferta a eliminar.
      */
@@ -128,17 +121,9 @@ public class OfertaServiceImpl implements OfertaService {
         if (id == null || ofertaRepository.buscarPorId(id).isEmpty()) {
             throw new NoEncontradoException("No se encuentra la oferta con ID: " + id);
         }
-        transaccionManager.ejecutarEnTransaccion(session -> {
-            Oferta oferta = session.find(Oferta.class, id);
-            if (oferta == null) {
-                throw new NoEncontradoException("No se encuentra la oferta con ID: " + id);
-            }
-            List<Entrevista> entrevistas = session.createQuery(
-                    "from Entrevista en where en.idOferta = :id", Entrevista.class)
-                    .setParameter("id", id)
-                    .getResultList();
-            entrevistas.forEach(session::remove);
-            session.remove(oferta);
+        transaccionManager.ejecutarEnTransaccion(conn -> {
+            entrevistaRepository.eliminarPorOferta(id, conn);
+            ofertaRepository.eliminar(id, conn);
             return null;
         });
     }

@@ -15,10 +15,7 @@ import java.util.stream.Collectors;
 /**
  * Inicializador de la base de datos v2.0.
  * <p>
- * Solo ejecuta los scripts SQL {@code schema.sql} y {@code data.sql} mediante
- * JDBC para crear el esquema y cargar los datos semilla cuando la tabla
- * {@code EMPRESA} está vacía. La validación del mapeo la realiza Hibernate con
- * la opción {@code validate} definida en {@code hibernate.cfg.xml}.
+ * Crea el esquema y carga datos si la base de datos está vacía.
  * </p>
  */
 public final class DataBaseInitializer {
