@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane stylesheets="/style.css" xmlns="http://javafx.com" xmlns:fx="http://javafx.com" fx:controller="com.tracker.controllers.FiltroController">
+   <center>
+      <VBox styleClass="contenedor-formulario">
+         <children>
+            <HBox styleClass="fila-dato">
+               <children>
+                  <Label text="Título" />
+                  <TextField fx:id="textfieldTitulo" />
+               </children>
+            </HBox>
+            <HBox styleClass="fila-dato">
+               <children>
+                  <Label text="Empresa" />
+                  <TextField fx:id="textfieldEmpresa" />
+               </children>
+            </HBox>
+            <HBox styleClass="fila-dato">
+               <children>
+                  <Label text="Estado" />
+                  <ChoiceBox fx:id="choiceboxEstado" />
+               </children>
+            </HBox>
+            <HBox styleClass="fila-dato">
+               <children>
+                  <Label text="Fecha de postulación" />
+                  <DatePicker fx:id="dateFechaMin" />
+                  <DatePicker fx:id="dateFechaMax" />
+               </children>
+            </HBox>
+            <HBox styleClass="fila-dato">
+               <children>
+                  <Label text="Salario" />
+                  <TextField fx:id="inpSalarioMin" />
+                  <TextField fx:id="inpSalarioMax" />
+               </children>
+            </HBox>
+            <HBox styleClass="barra-botones">
+               <children>
+                  <Button fx:id="btnFiltrar" mnemonicParsing="false" onAction="#onClickFiltrar" text="Filtrar" />
+                  <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#onClickCancelar" text="Cancelar" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
+

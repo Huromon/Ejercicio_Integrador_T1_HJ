@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane stylesheets="/style.css" xmlns="http://javafx.com" xmlns:fx="http://javafx.com" fx:controller="com.tracker.controllers.DetallesController">
+   <center>
+      <VBox styleClass="contenedor-formulario">
+         <children>
+            <HBox styleClass="fila-dato">
+               <children>
+                  <Label text="ID:" />
+                  <Label fx:id="txtID" text="Label" />
+               </children>
+            </HBox>
+            <HBox styleClass="fila-dato">
+               <children>
+                  <Label text="Título:" />
+                  <Label fx:id="txtTitulo" text="Label" />
+               </children>
+            </HBox>
+            <HBox styleClass="fila-dato">
+               <children>
+                  <Label text="Empresa:" />
+                  <Label fx:id="txtEmpresa" text="Label" />
+               </children>
+            </HBox>
+            <HBox styleClass="fila-dato">
+               <children>
+                  <Label text="Estado:" />
+                  <RadioButton fx:id="radPendiennte" mnemonicParsing="false" onAction="#onPendiente" text="Pendiente" />
+                  <RadioButton fx:id="radEntrevista" mnemonicParsing="false" onAction="#onEntrevista" text="Entrevista" />
+                  <RadioButton fx:id="radAceptada" mnemonicParsing="false" onAction="#onAceptada" text="Aceptada" />
+                  <RadioButton fx:id="radRechazada" mnemonicParsing="false" onAction="#onRechazada" text="Rechazada" />
+               </children>
+            </HBox>
+            <HBox styleClass="fila-dato">
+               <children>
+                  <Label text="Fecha de postulación:" />
+                  <Label fx:id="txtFechaPostulacion" text="Label" />
+               </children>
+            </HBox>
+            <HBox styleClass="fila-dato">
+               <children>
+                  <Label text="Salario:" />
+                  <Label fx:id="txtSalario" text="Label" />
+               </children>
+            </HBox>
+            <HBox styleClass="fila-dato">
+               <children>
+                  <Label text="Notas:" />
+                  <Label fx:id="txtNotas" text="Label" />
+               </children>
+            </HBox>
+            <HBox styleClass="fila-dato-superior">
+               <children>
+                  <Label text="Descripción:" />
+                  <Label fx:id="txtDescripcion" text="Label" wrapText="true" />
+               </children>
+            </HBox>
+            <VBox styleClass="bloque-lista">
+               <children>
+                  <Label text="Entrevistas" />
+                  <ListView fx:id="listEntrevistas" />
+               </children>
+            </VBox>
+            <HBox styleClass="barra-botones">
+               <children>
+                  <Button fx:id="btnModificar" mnemonicParsing="false" onAction="#onClickModificar" text="Modificar" />
+                  <Button fx:id="btnVolver" mnemonicParsing="false" onAction="#onClickVolver" text="Volver" />
+                  <Button fx:id="btnEliminar" mnemonicParsing="false" onAction="#onClickEliminar" text="Eliminar" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>

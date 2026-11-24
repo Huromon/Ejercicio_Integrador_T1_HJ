@@ -10,53 +10,50 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<BorderPane prefWidth="544.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tracker.controllers.FiltroController">
+<BorderPane stylesheets="/style.css" xmlns="http://javafx.com" xmlns:fx="http://javafx.com" fx:controller="com.tracker.controllers.FiltroController">
    <center>
-      <VBox prefWidth="544.0" spacing="7.0">
+      <VBox styleClass="contenedor-formulario">
          <children>
-            <HBox alignment="CENTER" fillHeight="false" spacing="20.0">
+            <HBox styleClass="fila-dato">
                <children>
                   <Label text="Título" />
                   <TextField fx:id="textfieldTitulo" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" fillHeight="false" spacing="20.0">
+            <HBox styleClass="fila-dato">
                <children>
                   <Label text="Empresa" />
                   <TextField fx:id="textfieldEmpresa" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" fillHeight="false" spacing="20.0">
+            <HBox styleClass="fila-dato">
                <children>
                   <Label text="Estado" />
-                  <ChoiceBox fx:id="choiceboxEstado" prefWidth="150.0" />
+                  <ChoiceBox fx:id="choiceboxEstado" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" fillHeight="false" spacing="20.0">
+            <HBox styleClass="fila-dato">
                <children>
                   <Label text="Fecha de postulación" />
                   <DatePicker fx:id="dateFechaMin" />
                   <DatePicker fx:id="dateFechaMax" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" fillHeight="false" spacing="20.0">
+            <HBox styleClass="fila-dato">
                <children>
                   <Label text="Salario" />
                   <TextField fx:id="inpSalarioMin" />
                   <TextField fx:id="inpSalarioMax" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" fillHeight="false" spacing="20.0">
+            <HBox styleClass="barra-botones">
                <children>
                   <Button fx:id="btnFiltrar" mnemonicParsing="false" onAction="#onClickFiltrar" text="Filtrar" />
                   <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#onClickCancelar" text="Cancelar" />
                </children>
             </HBox>
          </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
       </VBox>
    </center>
 </BorderPane>
+

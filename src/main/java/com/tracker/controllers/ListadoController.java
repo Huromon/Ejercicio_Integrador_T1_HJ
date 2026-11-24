@@ -12,9 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
@@ -107,12 +105,15 @@ public class ListadoController implements Initializable {
                 }
             }
         });
+
+
     }
 
     /**
      * Configura las columnas de la tabla de candidaturas.
      */
     private void configurarColumnas() {
+
         cId.setCellValueFactory(cell -> new SimpleStringProperty(
                 cell.getValue().getId() != null ? String.valueOf(cell.getValue().getId()) : ""
         ));
@@ -131,6 +132,27 @@ public class ListadoController implements Initializable {
         cEstado.setCellValueFactory(cell -> new SimpleStringProperty(
                 cell.getValue().getEstado() != null ? cell.getValue().getEstado().name() : ""
         ));
+        cEstado.setCellFactory(column -> new TableCell<Oferta, String>() {
+            @Override
+            protected void updateItem(String estado, boolean empty) {
+                super.updateItem(estado, empty);
+
+                getStyleClass().removeAll("estado-pendiente", "estado-entrevista", "estado-rechazada", "estado-aceptada");
+
+                if (empty || estado == null) {
+                    setText(null);
+                } else {
+                    setText(estado);
+                    switch (estado.toLowerCase()) {
+                        case "pendiente" -> getStyleClass().add("estado-pendiente");
+                        case "entrevista" -> getStyleClass().add("estado-entrevista");
+                        case "rechazada" -> getStyleClass().add("estado-rechazada");
+                        case "aceptada" -> getStyleClass().add("estado-aceptada");
+                    }
+                }
+            }
+        });
+
 
         cFechaPostulacion.setCellValueFactory(cell -> new SimpleStringProperty(
                 cell.getValue().getFechaPostulacion() != null ? cell.getValue().getFechaPostulacion().toString() : ""
@@ -139,6 +161,7 @@ public class ListadoController implements Initializable {
         cSalario.setCellValueFactory(cell -> new SimpleStringProperty(
                 cell.getValue().getSalario() != null ? cell.getValue().getSalario().toPlainString() : ""
         ));
+
     }
 
     /**

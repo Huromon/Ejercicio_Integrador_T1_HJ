@@ -6,35 +6,35 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane fx:id="fondo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="664.0" prefWidth="932.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tracker.controllers.ListadoController">
-   <center>
-      <TableView fx:id="tCandidaturas" editable="true" prefHeight="482.0" prefWidth="947.0" BorderPane.alignment="CENTER">
-        <columns>
-            <TableColumn fx:id="cId" prefWidth="38.0" text="Id" />
-            <TableColumn fx:id="cEmpresa" prefWidth="145.0" text="Empresa" />
-            <TableColumn fx:id="cTitulo" prefWidth="143.0" text="Título" />
-            <TableColumn fx:id="cEstado" prefWidth="75.0" text="Estado" />
-          <TableColumn fx:id="cFechaPostulacion" prefWidth="160.0" text="Fecha de postulación" />
-            <TableColumn fx:id="cSalario" prefWidth="75.0" text="Salario" />
-        </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
-   </center>
-   <bottom>
-      <HBox alignment="CENTER" BorderPane.alignment="TOP_RIGHT">
-         <children>
-            <Button fx:id="btnNueva" mnemonicParsing="false" onAction="#onClickNueva" text="Añadir" />
-         </children>
-      </HBox>
-   </bottom>
-   <top>
-      <HBox alignment="TOP_RIGHT" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="btnQuitarFiltro" mnemonicParsing="false" onAction="#onClickQuitarFiltro" text="Quitar filtro" visible="false" />
-            <Button fx:id="btnFiltrar" mnemonicParsing="false" onAction="#onClickFiltrar" text="Filtrar" />
-         </children>
-      </HBox>
-   </top>
+<BorderPane fx:id="fondo"  stylesheets="/style.css" xmlns="http://javafx.com" xmlns:fx="http://javafx.com" fx:controller="com.tracker.controllers.ListadoController">
+    <top>
+        <HBox styleClass="barra-superior">
+            <children>
+                <Button fx:id="btnQuitarFiltro" mnemonicParsing="false" onAction="#onClickQuitarFiltro" text="Quitar filtro" visible="false" />
+                <Button fx:id="btnFiltrar" mnemonicParsing="false" onAction="#onClickFiltrar" text="Filtrar" />
+            </children>
+        </HBox>
+    </top>
+    <center>
+        <TableView fx:id="tCandidaturas" editable="true">
+            <columns>
+                <TableColumn fx:id="cId" prefWidth="38.0" text="Id" />
+                <TableColumn fx:id="cEmpresa" prefWidth="145.0" text="Empresa" />
+                <TableColumn fx:id="cTitulo" prefWidth="143.0" text="Título" />
+                <TableColumn fx:id="cEstado" prefWidth="75.0" text="Estado" />
+                <TableColumn fx:id="cFechaPostulacion" prefWidth="160.0" text="Fecha de postulación" />
+                <TableColumn fx:id="cSalario" prefWidth="75.0" text="Salario" />
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+        </TableView>
+    </center>
+    <bottom>
+        <HBox styleClass="barra-inferior">
+            <children>
+                <Button fx:id="btnNueva" mnemonicParsing="false" onAction="#onClickNueva" text="Añadir" />
+            </children>
+        </HBox>
+    </bottom>
 </BorderPane>
