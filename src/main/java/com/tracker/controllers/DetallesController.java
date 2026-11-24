@@ -220,6 +220,7 @@ public class DetallesController implements Initializable {
             } else {
                 oo.cambiarEstado(seleccionada.getId(), Estado.PENDIENTE);
                 confirmarModificacion();
+                seleccionada.setEstado(Estado.PENDIENTE);
             }
         } else if (radEntrevista.isSelected()) {
             if (actual == Estado.ENTREVISTA) {
@@ -227,6 +228,7 @@ public class DetallesController implements Initializable {
             } else {
                 oo.cambiarEstado(seleccionada.getId(), Estado.ENTREVISTA);
                 confirmarModificacion();
+                seleccionada.setEstado(Estado.ENTREVISTA);
             }
         } else if (radAceptada.isSelected()) {
             if (actual == Estado.ACEPTADA) {
@@ -234,6 +236,7 @@ public class DetallesController implements Initializable {
             } else {
                 oo.cambiarEstado(seleccionada.getId(), Estado.ACEPTADA);
                 confirmarModificacion();
+                seleccionada.setEstado(Estado.ACEPTADA);
             }
         } else if (radRechazada.isSelected()) {
             if (actual == Estado.RECHAZADA) {
@@ -241,6 +244,7 @@ public class DetallesController implements Initializable {
             } else {
                 oo.cambiarEstado(seleccionada.getId(), Estado.RECHAZADA);
                 confirmarModificacion();
+                seleccionada.setEstado(Estado.RECHAZADA);
             }
         }
     }
