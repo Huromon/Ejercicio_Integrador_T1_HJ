@@ -97,8 +97,6 @@ src/main/resources
 └── com/tracker/views (main-view, nuevo-view, Candidatura-view, filtro-view .fxml)
 ```
 
-## Alcance según EJERCICIO.txt
-
 ### Acceso a Datos (Jesús)
 
 - Esquema MySQL con `EMPRESA`, `OFERTA` y `ENTREVISTA` y sus claves foráneas (`schema.sql`).
