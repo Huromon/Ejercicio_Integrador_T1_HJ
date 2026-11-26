@@ -1,103 +1,121 @@
-# Gestor de Candidaturas
+# Gestor de Candidaturas v2.0
 
-Ejercicio práctico de la asignatura Acceso a Datos.
+Aplicación de escritorio para registrar y seguir candidaturas laborales. Esta versión sustituye la consola de la v1.0 por una interfaz JavaFX y la persistencia en CSV por acceso **JDBC puro a MySQL**.
 
-## Gestor de Candidaturas v1.0
+Prototipo de diseño: https://www.figma.com/design/HECEbOoQ0EhoD2xgEMVDYP/Gestor_camdidaturas_HyJ?node-id=0-1&t=cd3ISSGQP5MxbuP9-1
 
-Aplicación de consola desarrollada por Jesús Pérez Martín y Hugo Roldán Moncayo en Java para gestionar candidaturas laborales y realizar un seguimiento de procesos de selección, permitiendo registrar ofertas, consultar su estado y almacenar la información de forma persistente mediante archivos CSV.
+## Autores y reparto de trabajo
+
+| Autor | Parte del ejercicio | Trabajo realizado |
+|---|---|---|
+| **Jesús Pérez Martín** | Acceso a Datos | Esquema y datos iniciales, configuración y `DataSource`, entidades y contratos de repositorio, implementaciones JDBC, servicios de negocio, fachada, transacciones, filtros y documentación Javadoc. |
+| **Hugo Roldán Moncayo** | Desarrollo de Interfaces | Vistas FXML diseñadas con Scene Builder, controladores y eventos, navegación entre pantallas, integración con la capa de servicios y presentación de nombres de empresa y estados. |
+
+## Cambios respecto a v1.0
+
+| v1.0 | v2.0 |
+|---|---|
+| Interfaz CLI por argumentos (`args[]`) | Interfaz gráfica JavaFX con vistas FXML |
+| Persistencia en `candidaturas.csv` | Persistencia en MySQL mediante JDBC |
+| Filtros por empresa y estado | Filtros combinables por empresa, título, estado, salario y fechas |
+| Solo ofertas | Ofertas, empresas y entrevistas con relaciones entre tablas |
+| IDs calculados en código | IDs generados por la base de datos (`AUTO_INCREMENT`) |
+
+La migración a Hibernate que se exploró durante el desarrollo fue descartada: el proyecto **no contiene dependencias, configuración ni código Hibernate/JPA**. El acceso a datos se realiza exclusivamente con `Connection`, `PreparedStatement` y `DataSource`.
 
 ## Funcionalidad
 
-1. Añadir candidaturas.
-2. Ver una candidatura mediante su ID.
-3. Listar todas las candidaturas registradas.
-4. Eliminar candidaturas.
-5. Filtrar candidaturas por empresa.
-6. Filtrar candidaturas por estado.
-7. Importar candidaturas desde un archivo CSV.
+- **Listado** de ofertas en un `TableView` con empresa, título, estado, fecha y salario.
+- **Alta de ofertas** con validación de campos obligatorios; la empresa se elige de un `ComboBox` editable y, si no existe, se da de alta automáticamente.
+- **Detalle de oferta** con información completa, empresa asociada y lista de entrevistas formateadas como `fecha | tipo | resultado`.
+- **Cambio de estado** de la candidatura desde el detalle: PENDIENTE, ENTREVISTA, ACEPTADA o RECHAZADA.
+- **Eliminación** de ofertas con confirmación y borrado de sus entrevistas en la misma transacción.
+- **Filtros combinables** por empresa, título, estado, salario mínimo/máximo y rango de fechas, con botón *Quitar filtro* para restaurar el listado completo.
+- **CRUD de empresas, ofertas y entrevistas** en la capa de servicios y repositorios (`crear`, `actualizar`, `listar`, `buscarPorId`, `eliminar`).
+- **Datos iniciales** cargados en la base de datos a partir del CSV de la v1.0.
 
-## Figma
+## Tecnología
 
-https://www.figma.com/design/HECEbOoQ0EhoD2xgEMVDYP/Gestor_camdidaturas_HyJ?node-id=0-1&t=cd3ISSGQP5MxbuP9-1
+- **Java 27** y **Maven** (`pom.xml`, versión `2.0-SNAPSHOT`).
+- **JavaFX 26.0.2**: `javafx-controls` y `javafx-fxml`; vistas maquetadas con Scene Builder.
+- **MySQL Connector/J 26.10.0** y JDBC estándar (`java.sql`, `javax.sql.DataSource`).
+- **Lombok 1.18.48** como procesador de anotaciones en tiempo de compilación.
+- Arquitectura multicapa: `presentation`, `controllers`, `common`, `business`, `data` y `exception`.
+- Patrón **Repository**, fachada de servicios `TrackerServiceFactory`, contexto compartido `AppContext`/`ContextKeys` y navegación centralizada en `SceneNavegator`.
+- Transacciones explícitas en `TransaccionManager` (`setAutoCommit(false)`, `commit`/`rollback`) para operaciones que afectan a varias tablas.
+- Documentación del código mediante **Javadoc** y logging con `java.util.logging`.
 
-## Comandos disponibles
+## Base de datos
 
-- `listar`
-- `listar --empresa Empresa`
-- `listar --estado PENDIENTE`
-- `listar --empresa Empresa --estado ENTREVISTA`
-- `añadir --titulo X --empresa Y --estado Z --fecha dd/MM/yyyy`
-- `ver ID`
-- `borrar ID`
-- `importar candidaturas.csv`
+MySQL en `localhost:3307`, esquema `Candidaturas`. Tablas y relaciones:
 
-## Estados disponibles
+```text
+EMPRESA (id, nombre, sector, web, fechaRegistro)
+OFERTA  (id, id_empresa FK, titulo, descripcion, estado, fechaPostulacion, enlace, salario, notas)
+ENTREVISTA (id, id_oferta FK, fecha, tipo, notas, resultado)
+```
 
-- PENDIENTE
-- ENTREVISTA
-- RECHAZADA
-- ACEPTADA
+- `src/main/resources/schema.sql`: creación del esquema y de las claves foráneas.
+- `src/main/resources/data.sql`: datos iniciales importados del CSV de la v1.0.
+- `DataBaseInitializer` ejecuta ambos scripts al arrancar si la base de datos está vacía.
+- Las credenciales se leen de las variables de entorno **`DB_USER`** y **`DB_PASSWORD`**; la URL de conexión está fijada en `ConfiguracionBd`.
 
-# Implementación
+## Ejecución
 
-- Se usa **Java 24** como lenguaje de programación.
-- Proyecto gestionado mediante **Maven**.
-- Interfaz de usuario mediante **CLI por argumentos** (`args[]`).
-- Persistencia de datos mediante archivos **CSV**.
-- Almacenamiento principal en el fichero `candidaturas.csv`.
-- Lectura de archivos utilizando `BufferedReader` y `FileReader`.
-- Escritura de archivos utilizando `BufferedWriter` y `FileWriter`.
-- Gestión de fechas mediante `LocalDate` y `DateTimeFormatter`.
-- Uso de **Record** para la entidad `Oferta`.
-- Uso de **Enum** para representar los estados de una candidatura.
-- Uso de colecciones `ArrayList` para la gestión de datos en memoria.
-- Arquitectura multicapa dividida en:
-    - Presentation
-    - Business
-    - Data
-- Uso de interfaces para desacoplar la lógica de negocio de la persistencia.
-- Implementación del patrón **Repository** para el acceso a datos.
-- Generación automática de identificadores para nuevas candidaturas.
-- Importación de candidaturas desde archivos CSV externos.
-- Validación de argumentos obligatorios y gestión básica de errores.
-- Documentación del código mediante **JavaDoc**.
+Requisitos: JDK 27, Maven y MySQL escuchando en el puerto 3307 con el esquema `Candidaturas` accesible.
+
+También se puede ejecutar desde IntelliJ con la clase `com.tracker.presentation.Launcher` (que llama a `Application.launch(Aplicacion.class, args)`) o directamente `com.tracker.presentation.Aplicacion`, configurada como `mainClass` del plugin de JavaFX.
 
 ## Estructura del proyecto
 
 ```text
-com.tracker
+src/main/java/com/tracker
 ├── business
-│   ├── OfertaService
-│   └── OfertaServicesint
-│
+│   ├── EmpresaService / EmpresaServiceImpl
+│   ├── EntrevistaService / EntrevistaServiceImpl
+│   ├── OfertaService / OfertaServiceImpl
+│   └── TrackerServiceFactory
+├── common
+│   ├── AppContext / ContextKeys
+│   └── SceneNavegator
+├── controllers
+│   ├── AñadirController / DetallesController
+│   └── FiltroController / ListadoController
 ├── data
-│   ├── entity
-│   │   ├── Estado
-│   │   └── Oferta
-│   │
-│   └── repository
-│       ├── OfertaRepository
-│       └── OfertaRepositoryFileImpl
-│
+│   ├── config (ConfiguracionBd / DataSourceFactory)
+│   ├── entity (Empresa, Oferta, Entrevista, Estado y DTOs)
+│   ├── repository (interfaces y Empresa/Oferta/EntrevistaJdbcRepository)
+│   ├── DataBaseInitializer
+│   ├── FuncionTransaccion / TransaccionManager
+├── exception
+│   ├── AccesoDatosException / ConfiguracionException
+│   └── NoEncontradoException / TrackerException / ValidacionException
 └── presentation
-    ├── Main
-    └── RecibirArgumentos
+    ├── Aplicacion / Launcher
+src/main/resources
+├── schema.sql / data.sql
+└── com/tracker/views (main-view, nuevo-view, Candidatura-view, filtro-view .fxml)
 ```
 
-## Formato de almacenamiento
+## Alcance según EJERCICIO.txt
 
-Las candidaturas se almacenan utilizando el siguiente formato CSV:
+### Acceso a Datos (Jesús)
 
-```csv
-id;titulo;empresa;estado;fechaPostulacion;enlace;descripcion;salario
-1;Desarrollador Java;EmpresaX;PENDIENTE;15/10/2026;https://empresa.com/oferta;Oferta junior;24000
-```
+- Esquema MySQL con `EMPRESA`, `OFERTA` y `ENTREVISTA` y sus claves foráneas (`schema.sql`).
+- Operaciones de la v1.0 migradas de archivos a JDBC.
+- Filtros con salario y combinaciones múltiples de empresa, estado, salario y fechas.
+- CRUD completo de empresas, ofertas y entrevistas en la capa de datos.
+- Cambio de estado de una candidatura.
+- Datos del CSV inicial importados en la base de datos (`data.sql`).
+- Consultas con `JOIN` entre ofertas, empresas y entrevistas.
+- Transacciones para las operaciones que afectan a varias tablas.
+- Configuración de conexión externalizada mediante variables de entorno.
 
-## Mejoras implementadas
+### Desarrollo de Interfaces (Hugo)
 
-- Filtrado de candidaturas por empresa y estado.
-- Importación masiva de candidaturas desde archivos CSV externos.
-- Generación automática de identificadores únicos.
-- Validación de parámetros obligatorios antes de registrar una candidatura.
-- Sistema de logging para el registro de errores y eventos relevantes de la aplicación.
-- Documentación completa del proyecto mediante JavaDoc.
+- Interfaz JavaFX + Scene Builder basada en el prototipo Figma de la v1.0.
+- Listado de ofertas con `TableView`, campos de filtro y botones de acción.
+- Detalle de oferta con información completa, empresa y lista de entrevistas.
+- Formularios y controles de alta y edición comunicados con la capa de servicios.
+- Vistas maquetadas en archivos `.fxml` y controladores que gestionan los eventos.
+- Navegación fluida entre pantallas mediante `FXMLLoader` y `SceneNavegator`.
